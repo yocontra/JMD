@@ -13,9 +13,8 @@ package net.contra.jmd.generic;
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
-import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.jar.*;

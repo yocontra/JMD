@@ -18,9 +18,8 @@ import java.util.jar.*;
  * To change this template use File | Settings | File Templates.
  */
 public class AllatoriTransformer {
-	//Illusion made this
 	LogHandler logger = new LogHandler("AllatoriTransformer");
-	ArrayList<ClassGen> cgs = new ArrayList<ClassGen>();
+	Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
 	ClassGen ALLATORI_CLASS;
 	String JAR_NAME;
 
@@ -42,7 +41,7 @@ public class AllatoriTransformer {
 					ALLATORI_CLASS = cg;
 					logger.debug("Allatori Class: " + ALLATORI_CLASS.getClassName());
 				} else {
-					cgs.add(cg);
+					cgs.put(cg.getClassName(), cg);
 				}
 			} else {
 				NonClassEntries.add(entry, jf.getInputStream(entry));
@@ -96,46 +95,16 @@ public class AllatoriTransformer {
 		return new String(cs);
 	}
 
-	public void dumpJar(String path) {
-		FileOutputStream os;
-		try {
-			os = new FileOutputStream(new File(path));
-		} catch(FileNotFoundException fnfe) {
-			throw new RuntimeException("could not create file \"" + path + "\": " + fnfe);
-		}
-		JarOutputStream jos;
-
-		try {
-			jos = new JarOutputStream(os);
-			for(ClassGen classIt : cgs) {
-				jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
-				jos.write(classIt.getJavaClass().getBytes());
-				jos.closeEntry();
-				jos.flush();
-			}
-			for(JarEntry jbe : NonClassEntries.entries) {
-				JarEntry destEntry = new JarEntry(jbe.getName());
-				byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
-				jos.putNextEntry(destEntry);
-				jos.write(bite);
-				jos.closeEntry();
-			}
-			jos.closeEntry();
-			jos.close();
-		} catch(IOException ioe) {
-		}
-	}
-
 	public void transform() throws TargetLostException {
 		logger.log("Starting Encrypted String Removal...");
 		replaceStrings();
 		logger.log("Deobfuscation Finished! Dumping jar...");
-		dumpJar(JAR_NAME.replace(".jar", "") + "-deob.jar");
+		GenericMethods.dumpJar(JAR_NAME, cgs.values());
 		logger.log("Operation Completed.");
 	}
 
 	public void ObfuscateStrings() {
-		for(ClassGen cg : cgs) {
+		for(ClassGen cg : cgs.values()) {
 			int replaced = 0;
 			for(Method method : cg.getMethods()) {
 				MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
@@ -156,7 +125,7 @@ public class AllatoriTransformer {
 	}
 
 	public void replaceStrings() throws TargetLostException {
-		for(ClassGen cg : cgs) {
+		for(ClassGen cg : cgs.values()) {
 			int replaced = 0;
 			for(Method method : cg.getMethods()) {
 				MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());

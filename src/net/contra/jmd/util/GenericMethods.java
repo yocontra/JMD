@@ -15,8 +15,9 @@ import java.util.jar.*;
  * To change this template use File | Settings | File Templates.
  */
 public class GenericMethods {
+	//TODO: Get LDC_W into isInt and getValueOfInt
 	public static boolean isInt(Instruction ins) {
-		if(((ins instanceof BIPUSH) || (ins instanceof SIPUSH) || (ins instanceof ICONST))) {
+		if(ins instanceof BIPUSH || ins instanceof SIPUSH || ins instanceof ICONST) {
 			return true;
 		} else {
 			return false;
@@ -28,8 +29,10 @@ public class GenericMethods {
 			return ((BIPUSH) ins).getValue().intValue();
 		} else if(ins instanceof SIPUSH) {
 			return ((SIPUSH) ins).getValue().intValue();
-		} else {
+		} else if (ins instanceof ICONST) {
 			return ((ICONST) ins).getValue().intValue();
+		} else {
+			return 0;
 		}
 	}
 

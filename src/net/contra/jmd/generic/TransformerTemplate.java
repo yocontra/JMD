@@ -3,9 +3,8 @@ package net.contra.jmd.generic;
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.generic.ClassGen;
-import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
 import java.util.jar.*;
 

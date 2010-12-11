@@ -18,24 +18,8 @@ import java.util.jar.*;
 public class JShrinkTransformer {
 	private static LogHandler logger = new LogHandler("JShrinkTransformer");
 	private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
-	private Map<Integer, String> jStrings = new HashMap<Integer, String>();
 	String JAR_NAME;
 	ClassGen LoaderClass;
-
-	public String getJString(int index) {
-		return jStrings.get(index);
-	}
-
-	public boolean isLoader(ClassGen cg) {
-		if(cg.getMethods().length == 3 && cg.getMethods()[1].isStatic()
-				&& cg.getMethods()[1].isFinal()
-				&& cg.getMethods()[1].isPublic()
-				&& cg.getMethods()[1].isSynchronized()
-				&& cg.getMethods()[1].getReturnType().toString().equals("java.lang.String")) {
-			return true;
-		}
-		return false;
-	}
 
 	public JShrinkTransformer(String jarfile) throws Exception {
 		File jar = new File(jarfile);
@@ -64,7 +48,16 @@ public class JShrinkTransformer {
 		}
 		logger.debug("Classes loaded from JAR");
 	}
-
+	public boolean isLoader(ClassGen cg) {
+		if(cg.getMethods().length == 3 && cg.getMethods()[1].isStatic()
+				&& cg.getMethods()[1].isFinal()
+				&& cg.getMethods()[1].isPublic()
+				&& cg.getMethods()[1].isSynchronized()
+				&& cg.getMethods()[1].getReturnType().toString().equals("java.lang.String")) {
+			return true;
+		}
+		return false;
+	}
 	public void replaceStrings() throws TargetLostException {
 		for(ClassGen cg : cgs.values()) {
 			int replaced = 0;

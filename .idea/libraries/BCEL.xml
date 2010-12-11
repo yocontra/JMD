@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="BCEL">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/BCEL.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

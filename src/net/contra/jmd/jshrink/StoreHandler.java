@@ -51,6 +51,7 @@ public class StoreHandler {
 						j++;
 					}
 				}
+				localInputStream.reset();
 				localInputStream.close();
 			}
 		}

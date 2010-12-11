@@ -118,37 +118,6 @@ public class JShrinkTransformer {
 		}
 	}
 
-	public void dumpJar(String path) {
-		FileOutputStream os;
-		try {
-			os = new FileOutputStream(new File(path));
-		} catch(FileNotFoundException fnfe) {
-			throw new RuntimeException("could not create file \"" + path + "\": " + fnfe);
-		}
-		JarOutputStream jos;
-
-		try {
-			jos = new JarOutputStream(os);
-			for(ClassGen classIt : cgs.values()) {
-				jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
-				jos.write(classIt.getJavaClass().getBytes());
-				jos.closeEntry();
-				jos.flush();
-			}
-			for(JarEntry jbe : NonClassEntries.entries) {
-				JarEntry destEntry = new JarEntry(jbe.getName());
-				if(!(destEntry.getName().contains("I.gif"))) {
-					byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
-					jos.putNextEntry(destEntry);
-					jos.write(bite);
-					jos.closeEntry();
-				}
-			}
-			jos.closeEntry();
-			jos.close();
-		} catch(IOException ioe) {
-		}
-	}
 
 	public void transform() {
 		try {
@@ -158,7 +127,7 @@ public class JShrinkTransformer {
 			e.printStackTrace();
 		}
 		logger.log("Deobfuscation Finished! Dumping jar...");
-		dumpJar(JAR_NAME.replace(".jar", "") + "-deob.jar");
+		GenericMethods.dumpJar(JAR_NAME, cgs.values());
 		logger.log("Operation Completed.");
 	}
 }

@@ -115,10 +115,10 @@ public class AllatoriTransformer {
 			}
 			for(JarEntry jbe : NonClassEntries.entries) {
 				JarEntry destEntry = new JarEntry(jbe.getName());
-					byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
-					jos.putNextEntry(destEntry);
-					jos.write(bite);
-					jos.closeEntry();
+				byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
+				jos.putNextEntry(destEntry);
+				jos.write(bite);
+				jos.closeEntry();
 			}
 			jos.closeEntry();
 			jos.close();
@@ -133,26 +133,28 @@ public class AllatoriTransformer {
 		dumpJar(JAR_NAME.replace(".jar", "") + "-deob.jar");
 		logger.log("Operation Completed.");
 	}
-    public void ObfuscateStrings(){
-        for(ClassGen cg : cgs){
-            int replaced = 0;
-            for(Method method : cg.getMethods()){
-                MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
-                InstructionList list = mg.getInstructionList();
-                if(list == null){
-                    continue;
-                }
-                InstructionFinder finder = new InstructionFinder(list);
-                Iterator<InstructionHandle[]> matches = finder.search("LDC");
-                while(matches.hasNext()){
-                    InstructionHandle[] match = matches.next();
-                    /*
-                    INVOKESTATIC inv = new INVOKESTATIC(22);
-                    list.insert(match, (INSTRUCTION)inv);  */
-                }
-            }
-        }
-    }
+
+	public void ObfuscateStrings() {
+		for(ClassGen cg : cgs) {
+			int replaced = 0;
+			for(Method method : cg.getMethods()) {
+				MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
+				InstructionList list = mg.getInstructionList();
+				if(list == null) {
+					continue;
+				}
+				InstructionFinder finder = new InstructionFinder(list);
+				Iterator<InstructionHandle[]> matches = finder.search("LDC");
+				while(matches.hasNext()) {
+					InstructionHandle[] match = matches.next();
+					/*
+										INVOKESTATIC inv = new INVOKESTATIC(22);
+										list.insert(match, (INSTRUCTION)inv);  */
+				}
+			}
+		}
+	}
+
 	public void replaceStrings() throws TargetLostException {
 		for(ClassGen cg : cgs) {
 			int replaced = 0;

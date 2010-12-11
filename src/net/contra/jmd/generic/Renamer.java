@@ -2,7 +2,7 @@ package net.contra.jmd.generic;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.*;
+import org.apache.bcel.generic.ClassGen;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -51,41 +51,11 @@ public class Renamer {
 		}
 	}
 
-	public void dumpJar(String path) {
-		FileOutputStream os;
-		try {
-			os = new FileOutputStream(new File(path));
-		} catch(FileNotFoundException fnfe) {
-			throw new RuntimeException("could not create file \"" + path + "\": " + fnfe);
-		}
-		JarOutputStream jos;
-
-		try {
-			jos = new JarOutputStream(os);
-			for(ClassGen classIt : cgs.values()) {
-				jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
-				jos.write(classIt.getJavaClass().getBytes());
-				jos.closeEntry();
-				jos.flush();
-			}
-			for(JarEntry jbe : NonClassEntries.entries) {
-				JarEntry destEntry = new JarEntry(jbe.getName());
-				byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
-				jos.putNextEntry(destEntry);
-				jos.write(bite);
-				jos.closeEntry();
-			}
-			jos.closeEntry();
-			jos.close();
-		} catch(IOException ioe) {
-		}
-	}
-
 	public void transform() {
 		logger.log("Generic Transformer");
-
+		renameFields();
 		logger.log("Deobfuscation finished! Dumping jar...");
-		dumpJar(JAR_NAME.replace(".jar", "") + "-deob.jar");
+		GenericMethods.dumpJar(JAR_NAME, cgs.values());
 		logger.log("Operation Completed.");
 
 	}

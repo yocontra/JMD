@@ -52,43 +52,13 @@ public class GenericStringDeobfuscator {
 		}
 	}
 
-	public void dumpJar(String path) {
-		FileOutputStream os;
-		try {
-			os = new FileOutputStream(new File(path));
-		} catch(FileNotFoundException fnfe) {
-			throw new RuntimeException("could not create file \"" + path + "\": " + fnfe);
-		}
-		JarOutputStream jos;
-
-		try {
-			jos = new JarOutputStream(os);
-			for(ClassGen classIt : cgs.values()) {
-				jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
-				jos.write(classIt.getJavaClass().getBytes());
-				jos.closeEntry();
-				jos.flush();
-			}
-			for(JarEntry jbe : NonClassEntries.entries) {
-				JarEntry destEntry = new JarEntry(jbe.getName());
-				byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
-				jos.putNextEntry(destEntry);
-				jos.write(bite);
-				jos.closeEntry();
-			}
-			jos.closeEntry();
-			jos.close();
-		} catch(IOException ioe) {
-		}
-	}
-
 	public void replaceStrings() {
 		for(ClassGen cg : cgs.values()) {
 			int replaced = 0;
 			for(Method method : cg.getMethods()) {
-				if (method.isAbstract() || method.isNative()) {
-                    continue;
-                }
+				if(method.isAbstract() || method.isNative()) {
+					continue;
+				}
 				MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
 				InstructionList list = mg.getInstructionList();
 				if(list == null) {
@@ -124,7 +94,7 @@ public class GenericStringDeobfuscator {
 							java.lang.reflect.Method mthd = null;
 							try {
 								//mthd = cl.getMethod(methodCallSig, String.class);
-								//TODO: Figure out a better way to find the method (method signature?)
+								//TODO: Figure out a better way to find the method (method signature?) because method names can be the same
 								mthd = cl.getMethod(methodCallMethod, String.class);
 							} catch(NoSuchMethodException e) {
 								//e.printStackTrace();
@@ -170,7 +140,7 @@ public class GenericStringDeobfuscator {
 		logger.log("Still basic (and very buggy)");
 		replaceStrings();
 		logger.log("Deobfuscation finished! Dumping jar...");
-		dumpJar(JAR_NAME.replace(".jar", "") + "-deob.jar");
+		GenericMethods.dumpJar(JAR_NAME, cgs.values());
 		logger.log("Operation Completed.");
 
 	}

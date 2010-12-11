@@ -42,31 +42,31 @@ public class SmokeScreenTransformer {
 				InstructionList list = mg.getInstructionList();
 				InstructionHandle[] handles = list.getInstructionHandles();
 				for(int x = 0; x < handles.length; x++) {
-				  if(x + 3 < handles.length) {
-					if(handles[x].getInstruction() instanceof GETSTATIC
-									&& GenericMethods.isInt(handles[x + 1].getInstruction())
-									&& GenericMethods.isInt(handles[x + 2].getInstruction())
-									&& GenericMethods.isCall(handles[x + 3].getInstruction())) {
-						if(GenericMethods.getCallMethodName(handles[x + 3].getInstruction(), cg.getConstantPool()).contains("substring")){
-							int con1 = GenericMethods.getValueOfInt(handles[x + 1].getInstruction(), cg.getConstantPool());
-							int con2 = GenericMethods.getValueOfInt(handles[x + 2].getInstruction(), cg.getConstantPool());
-							NOP nop = new NOP();
-							int stringRef = cg.getConstantPool().addString(getActualString(cg.getClassName(), con1, con2));
-							LDC data = new LDC(stringRef);
-							handles[x].setInstruction(data);
-							handles[x+1].setInstruction(nop);
-							handles[x+2].setInstruction(nop);
-							handles[x+3].setInstruction(nop);
-							replaced++;
-							mg.setInstructionList(list);
-							mg.removeNOPs();
-							mg.setMaxLocals();
-							mg.setMaxStack();
-							cg.replaceMethod(m, mg.getMethod());
-							continue;
+					if(x + 3 < handles.length) {
+						if(handles[x].getInstruction() instanceof GETSTATIC
+								&& GenericMethods.isInt(handles[x + 1].getInstruction())
+								&& GenericMethods.isInt(handles[x + 2].getInstruction())
+								&& GenericMethods.isCall(handles[x + 3].getInstruction())) {
+							if(GenericMethods.getCallMethodName(handles[x + 3].getInstruction(), cg.getConstantPool()).contains("substring")) {
+								int con1 = GenericMethods.getValueOfInt(handles[x + 1].getInstruction(), cg.getConstantPool());
+								int con2 = GenericMethods.getValueOfInt(handles[x + 2].getInstruction(), cg.getConstantPool());
+								NOP nop = new NOP();
+								int stringRef = cg.getConstantPool().addString(getActualString(cg.getClassName(), con1, con2));
+								LDC data = new LDC(stringRef);
+								handles[x].setInstruction(data);
+								handles[x + 1].setInstruction(nop);
+								handles[x + 2].setInstruction(nop);
+								handles[x + 3].setInstruction(nop);
+								replaced++;
+								mg.setInstructionList(list);
+								mg.removeNOPs();
+								mg.setMaxLocals();
+								mg.setMaxStack();
+								cg.replaceMethod(m, mg.getMethod());
+								continue;
+							}
 						}
 					}
-				  }
 				}
 			}
 			if(replaced > 0) {
@@ -82,24 +82,24 @@ public class SmokeScreenTransformer {
 				MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
 				InstructionList list = mg.getInstructionList();
 				InstructionHandle[] handles = list.getInstructionHandles();
-					for(int x = 0; x < handles.length; x++) {
-						if(x + 3 < handles.length) {
-							if(handles[x].getInstruction() instanceof LDC
-									&& handles[x + 1].getInstruction() instanceof ASTORE
-									&& GenericMethods.isInt(handles[x + 2].getInstruction())
-									&& handles[x + 3].getInstruction() instanceof ISTORE) {
-								key = GenericMethods.getValueOfInt(handles[x + 2].getInstruction(), cg.getConstantPool());
-								LDC tx = (LDC) handles[x].getInstruction();
+				for(int x = 0; x < handles.length; x++) {
+					if(x + 3 < handles.length) {
+						if(handles[x].getInstruction() instanceof LDC
+								&& handles[x + 1].getInstruction() instanceof ASTORE
+								&& GenericMethods.isInt(handles[x + 2].getInstruction())
+								&& handles[x + 3].getInstruction() instanceof ISTORE) {
+							key = GenericMethods.getValueOfInt(handles[x + 2].getInstruction(), cg.getConstantPool());
+							LDC tx = (LDC) handles[x].getInstruction();
 
-								String encryptedContent = tx.getValue(cg.getConstantPool()).toString();
-								String decryptedContent = decrypt(encryptedContent, key);
-								logger.debug("Found key for " + cg.getClassName() + ": " + key);
-								logger.debug("Strings for class: " + decryptedContent);
-								ssStrings.put(cg.getClassName(), decryptedContent);
-								continue;
-							}
+							String encryptedContent = tx.getValue(cg.getConstantPool()).toString();
+							String decryptedContent = decrypt(encryptedContent, key);
+							logger.debug("Found key for " + cg.getClassName() + ": " + key);
+							logger.debug("Strings for class: " + decryptedContent);
+							ssStrings.put(cg.getClassName(), decryptedContent);
+							continue;
 						}
 					}
+				}
 			}
 		}
 	}
@@ -107,6 +107,7 @@ public class SmokeScreenTransformer {
 	public Map<String, ClassGen> getClasses() {
 		return cgs;
 	}
+
 	public SmokeScreenTransformer(String jarfile) throws Exception {
 		cgs = new HashMap<String, ClassGen>();
 		File jar = new File(jarfile);
@@ -153,39 +154,9 @@ public class SmokeScreenTransformer {
 		logger.log("Removing Unconditional Branches...");
 		unconditionalBranchTransformer();
 		logger.log("Deobfuscation finished! Dumping jar...");
-		dumpJar(JAR_NAME.replace(".jar", "") + "-deob.jar");
+		GenericMethods.dumpJar(JAR_NAME, cgs.values());
 		logger.log("Operation Completed.");
 
-	}
-
-	public void dumpJar(String path) {
-		FileOutputStream os;
-		try {
-			os = new FileOutputStream(new File(path));
-		} catch(FileNotFoundException fnfe) {
-			throw new RuntimeException("could not create file \"" + path + "\": " + fnfe);
-		}
-		JarOutputStream jos;
-
-		try {
-			jos = new JarOutputStream(os);
-			for(ClassGen classIt : cgs.values()) {
-				jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
-				jos.write(classIt.getJavaClass().getBytes());
-				jos.closeEntry();
-				jos.flush();
-			}
-			for(JarEntry jbe : NonClassEntries.entries) {
-				JarEntry destEntry = new JarEntry(jbe.getName());
-				byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
-				jos.putNextEntry(destEntry);
-				jos.write(bite);
-				jos.closeEntry();
-			}
-			jos.closeEntry();
-			jos.close();
-		} catch(IOException ioe) {
-		}
 	}
 
 

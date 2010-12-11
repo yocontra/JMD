@@ -1,6 +1,11 @@
 package net.contra.jmd.util;
 
 import org.apache.bcel.generic.*;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
+import java.util.Collection;
+import java.util.jar.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,7 +33,7 @@ public class GenericMethods {
 		}
 	}
 
-    public static String getCallSignature(Instruction ins, ConstantPoolGen cp) {
+	public static String getCallSignature(Instruction ins, ConstantPoolGen cp) {
 		if(ins instanceof INVOKESTATIC) {
 			INVOKESTATIC invst = (INVOKESTATIC) ins;
 			return invst.getSignature(cp);
@@ -63,7 +68,36 @@ public class GenericMethods {
 			return null;
 		}
 	}
+	public static void dumpJar(String path, Collection<ClassGen> cgs) {
+		FileOutputStream os;
+		path = path.replace(".jar", "") + "-deob.jar";
+		try {
+			os = new FileOutputStream(new File(path));
+		} catch(FileNotFoundException fnfe) {
+			throw new RuntimeException("could not create file \"" + path + "\": " + fnfe);
+		}
+		JarOutputStream jos;
 
+		try {
+			jos = new JarOutputStream(os);
+			for(ClassGen classIt : cgs) {
+				jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
+				jos.write(classIt.getJavaClass().getBytes());
+				jos.closeEntry();
+				jos.flush();
+			}
+			for(JarEntry jbe : NonClassEntries.entries) {
+				JarEntry destEntry = new JarEntry(jbe.getName());
+				byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
+				jos.putNextEntry(destEntry);
+				jos.write(bite);
+				jos.closeEntry();
+			}
+			jos.closeEntry();
+			jos.close();
+		} catch(IOException ioe) {
+		}
+	}
 	public static String getCallMethodName(Instruction ins, ConstantPoolGen cp) {
 		if(ins instanceof INVOKESTATIC) {
 			INVOKESTATIC invst = (INVOKESTATIC) ins;

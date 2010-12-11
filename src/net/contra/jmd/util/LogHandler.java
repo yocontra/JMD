@@ -24,7 +24,7 @@ public class LogHandler {
 	}
 
 	public void debug(String msg) {
-		if(Deobfuscator.Debug) {
+		if(Deobfuscator.debug) {
 			System.out.println("[" + _className + "]" + "[DEBUG]" + msg);
 		}
 	}

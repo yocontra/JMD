@@ -46,6 +46,7 @@ public class DashOTransformer {
 			}
 		}
 	}
+
 	public void removeControlFlow() {
 		for(ClassGen cg : cgs.values()) {
 			int replaced = 0;
@@ -54,25 +55,26 @@ public class DashOTransformer {
 				InstructionList il = mg.getInstructionList();
 				InstructionHandle[] handles = il.getInstructionHandles();
 				for(int i = 0; i < handles.length; i++) {
-				   if(handles[i].getInstruction() instanceof GOTO){
-					   GOTO origGOTO = (GOTO)handles[i].getInstruction();
-					   InstructionHandle origTarget = origGOTO.getTarget();
-					   if(origTarget.getInstruction() instanceof GOTO){
-						   handles[i].setInstruction(origTarget.getInstruction());
-						   replaced++;
-					   }
-				   }
+					if(handles[i].getInstruction() instanceof GOTO) {
+						GOTO origGOTO = (GOTO) handles[i].getInstruction();
+						InstructionHandle origTarget = origGOTO.getTarget();
+						if(origTarget.getInstruction() instanceof GOTO) {
+							handles[i].setInstruction(origTarget.getInstruction());
+							replaced++;
+						}
+					}
 				}
 				mg.setInstructionList(il);
 				mg.setMaxLocals();
 				mg.setMaxStack();
 				cg.replaceMethod(m, mg.getMethod());
 			}
-			if(replaced > 0){
+			if(replaced > 0) {
 				logger.debug("Replaced " + replaced + " GOTO-GOTOs");
 			}
 		}
 	}
+
 	public void unconditionalBranchTransformer() {
 		for(ClassGen cg : cgs.values()) {
 			for(Method method : cg.getMethods()) {
@@ -184,6 +186,7 @@ public class DashOTransformer {
 			logger.debug("Corrected exit flow " + correct + " times in " + cg.getClassName());
 		}
 	}
+
 	public static String decrypt(String input) {
 		char[] inputChars = input.toCharArray();
 		int length = inputChars.length - 1;
@@ -244,7 +247,7 @@ public class DashOTransformer {
 							handles[i + 1].setInstruction(new NOP());
 							logger.debug(enc + " -> " + decrypt(enc));
 						}
-					}	
+					}
 				}
 				mg.setInstructionList(il);
 				mg.setMaxLocals();

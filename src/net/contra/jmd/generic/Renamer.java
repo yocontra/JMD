@@ -75,7 +75,7 @@ public class Renamer {
 				//TODO: Rename classes first, then methods, then fields.
 				MethodGen mg = new MethodGen(m, cg.getClassName(), cpg);
 				mg.setName(name);
-				
+
 				cg.replaceMethod(m, mg.getMethod());
 				cg.setConstantPool(cpg);
 				count++;

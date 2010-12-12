@@ -40,8 +40,6 @@ public class GenericStringDeobfuscator {
 			if(entry == null) {
 				break;
 			}
-			if(entry.isDirectory()) {
-			}
 			if(entry.getName().endsWith(".class")) {
 				ClassGen cg = new ClassGen(new ClassParser(jf.getInputStream(entry), entry.getName()).parse());
 				cgs.put(cg.getClassName(), cg);
@@ -92,12 +90,9 @@ public class GenericStringDeobfuscator {
 							}
 							java.lang.reflect.Method mthd = null;
 							try {
-								//mthd = cl.getMethod(methodCallSig, String.class);
-								//TODO: Figure out a better way to find the method (method signature?) because method names can be the same
 								mthd = cl.getMethod(methodCallMethod, String.class);
+								mthd.setAccessible(true);
 							} catch(NoSuchMethodException e) {
-								//e.printStackTrace();
-								//logger.error("Tried to access a method that wasn't loaded");
 								continue;
 							}
 
@@ -107,10 +102,8 @@ public class GenericStringDeobfuscator {
 							try {
 								decryptedString = mthd.invoke(null, encryptedString).toString();
 							} catch(IllegalAccessException e) {
-								//e.printStackTrace();
 								continue;
 							} catch(InvocationTargetException e) {
-								//e.printStackTrace();
 								continue;
 							}
 							logger.debug(encryptedString + " -> " + decryptedString + " in " + cg.getClassName() + "." + method.getName());

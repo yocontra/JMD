@@ -44,12 +44,12 @@ public class SmokeScreenTransformer {
 				for(int x = 0; x < handles.length; x++) {
 					if(x + 3 < handles.length) {
 						if(handles[x].getInstruction() instanceof GETSTATIC
-								&& GenericMethods.isInt(handles[x + 1].getInstruction())
-								&& GenericMethods.isInt(handles[x + 2].getInstruction())
+								&& GenericMethods.isNumber(handles[x + 1].getInstruction())
+								&& GenericMethods.isNumber(handles[x + 2].getInstruction())
 								&& GenericMethods.isCall(handles[x + 3].getInstruction())) {
 							if(GenericMethods.getCallMethodName(handles[x + 3].getInstruction(), cg.getConstantPool()).contains("substring")) {
-								int con1 = GenericMethods.getValueOfInt(handles[x + 1].getInstruction(), cg.getConstantPool());
-								int con2 = GenericMethods.getValueOfInt(handles[x + 2].getInstruction(), cg.getConstantPool());
+								int con1 = GenericMethods.getValueOfNumber(handles[x + 1].getInstruction(), cg.getConstantPool());
+								int con2 = GenericMethods.getValueOfNumber(handles[x + 2].getInstruction(), cg.getConstantPool());
 								NOP nop = new NOP();
 								int stringRef = cg.getConstantPool().addString(getActualString(cg.getClassName(), con1, con2));
 								LDC data = new LDC(stringRef);
@@ -86,9 +86,9 @@ public class SmokeScreenTransformer {
 					if(x + 3 < handles.length) {
 						if(handles[x].getInstruction() instanceof LDC
 								&& handles[x + 1].getInstruction() instanceof ASTORE
-								&& GenericMethods.isInt(handles[x + 2].getInstruction())
+								&& GenericMethods.isNumber(handles[x + 2].getInstruction())
 								&& handles[x + 3].getInstruction() instanceof ISTORE) {
-							key = GenericMethods.getValueOfInt(handles[x + 2].getInstruction(), cg.getConstantPool());
+							key = GenericMethods.getValueOfNumber(handles[x + 2].getInstruction(), cg.getConstantPool());
 							LDC tx = (LDC) handles[x].getInstruction();
 
 							String encryptedContent = tx.getValue(cg.getConstantPool()).toString();

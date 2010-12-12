@@ -16,23 +16,26 @@ import java.util.jar.*;
  */
 public class GenericMethods {
 	//TODO: Get LDC_W into isInt and getValueOfInt
-	public static boolean isInt(Instruction ins) {
-		if(ins instanceof BIPUSH || ins instanceof SIPUSH || ins instanceof ICONST) {
+	public static boolean isNumber(Instruction ins) {
+		if(ins instanceof BIPUSH || ins instanceof SIPUSH || ins instanceof ICONST || ins instanceof LDC_W) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public static int getValueOfInt(Instruction ins, ConstantPoolGen cpg) {
+	public static int getValueOfNumber(Instruction ins, ConstantPoolGen cpg) {
 		if(ins instanceof BIPUSH) {
 			return ((BIPUSH) ins).getValue().intValue();
 		} else if(ins instanceof SIPUSH) {
 			return ((SIPUSH) ins).getValue().intValue();
 		} else if (ins instanceof ICONST) {
 			return ((ICONST) ins).getValue().intValue();
+		} else if (ins instanceof LDC_W) {
+			LDC_W ldcw = (LDC_W)ins;
+			return Integer.valueOf(ldcw.getValue(cpg).toString());
 		} else {
-			return 0;
+			return -1;
 		}
 	}
 

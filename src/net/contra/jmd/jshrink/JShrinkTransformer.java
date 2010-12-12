@@ -69,24 +69,10 @@ public class JShrinkTransformer {
 				}
 				InstructionHandle[] handles = list.getInstructionHandles();
 				for(int i = 1; i < handles.length; i++) {
-					if((handles[i].getInstruction() instanceof INVOKESTATIC)
-							&& ((handles[i - 1].getInstruction() instanceof BIPUSH)
-							|| (handles[i - 1].getInstruction() instanceof SIPUSH)
-							|| (handles[i - 1].getInstruction() instanceof ICONST)
-							|| (handles[i - 1].getInstruction() instanceof LDC_W))) {
+					if(handles[i].getInstruction() instanceof INVOKESTATIC && GenericMethods.isNumber(handles[i - 1].getInstruction())) {
 						INVOKESTATIC methodCall = (INVOKESTATIC) handles[i].getInstruction();
 						if(methodCall.getClassName(cg.getConstantPool()).contains(LoaderClass.getClassName())) {
-							int push;
-							if(handles[i - 1].getInstruction() instanceof BIPUSH) {
-								push = ((BIPUSH) handles[i - 1].getInstruction()).getValue().intValue();
-							} else if(handles[i - 1].getInstruction() instanceof SIPUSH) {
-								push = ((SIPUSH) handles[i - 1].getInstruction()).getValue().intValue();
-							} else if(handles[i - 1].getInstruction() instanceof LDC_W) {
-								push = Integer.parseInt(((LDC_W) handles[i - 1].getInstruction()).getValue(cg.getConstantPool()).toString());
-							} else {
-								push = ((ICONST) handles[i - 1].getInstruction()).getValue().intValue();
-							}
-
+							int push = GenericMethods.getValueOfNumber(handles[i - 1].getInstruction(), cg.getConstantPool());
 							String decryptedString = StoreHandler.I(push);
 							if(decryptedString != null) {
 								int stringRef = cg.getConstantPool().addString(decryptedString);

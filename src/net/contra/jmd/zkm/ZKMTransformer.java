@@ -191,8 +191,8 @@ public class ZKMTransformer {
 							TABLESWITCH xor = (TABLESWITCH) handles[i].getInstruction();
 							for(int a = 0; a < xor.getTargets().length; a++) {
 								Instruction target = xor.getTargets()[a].getInstruction();
-								if(GenericMethods.isInt(target)) {
-									keyAsChars[a] = (char) GenericMethods.getValueOfInt(target, cg.getConstantPool());
+								if(GenericMethods.isNumber(target)) {
+									keyAsChars[a] = (char) GenericMethods.getValueOfNumber(target, cg.getConstantPool());
 								} else {
 									logger.error("ZKM Key Method A Failed, trying method B!");
 									return findKeyB(cg);
@@ -351,7 +351,7 @@ public class ZKMTransformer {
 				ArrayList<String> all = new ArrayList<String>();
 				if(method.getName().contains("clinit")) {
 					for(int i = 0; i < handles.length; i++) {
-						if(GenericMethods.isInt(handles[i].getInstruction()) && handles[i + 1].getInstruction() instanceof LDC) {
+						if(GenericMethods.isNumber(handles[i].getInstruction()) && handles[i + 1].getInstruction() instanceof LDC) {
 							LDC orig = ((LDC) handles[i + 1].getInstruction());
 							String enc = (String) orig.getValue(cg.getConstantPool());
 							String dec = decrypt(enc, key);

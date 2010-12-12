@@ -58,7 +58,7 @@ public class StringFixer {
 				for(int i = 0; i < handles.length; i++) {
 					if((handles[i].getInstruction() instanceof NEW)
 							&& (handles[i + 1].getInstruction() instanceof DUP)
-							&& GenericMethods.isInt(handles[i + 2].getInstruction())
+							&& GenericMethods.isNumber(handles[i + 2].getInstruction())
 							&& (handles[i + 3].getInstruction() instanceof NEWARRAY)) {
 						String newType = ((NEW) handles[i].getInstruction()).getLoadClassType(cg.getConstantPool()).toString();
 						type = ((NEWARRAY) handles[i + 3].getInstruction()).getType().toString();
@@ -67,7 +67,7 @@ public class StringFixer {
 						//if(newType.equals("java.lang.String") && (type.equals("byte[]") || type.equals("char[]"))) {
 						if(newType.equals("java.lang.String") && type.contains("[]")) {
 							startLoc = i;
-							arrayLength = GenericMethods.getValueOfInt(handles[i + 2].getInstruction(), cg.getConstantPool());
+							arrayLength = GenericMethods.getValueOfNumber(handles[i + 2].getInstruction(), cg.getConstantPool());
 							//logger.debug("Start Location for BASA replacement: " + startLoc);
 							//logger.debug("Length of Array: " + arrayLength);
 						}
@@ -75,8 +75,8 @@ public class StringFixer {
 					if(startLoc >= 0 && arrayLength >= 1) {
 						if(handles.length > (i + 1)) {
 							if((handles[i].getInstruction() instanceof BASTORE)
-									&& GenericMethods.isInt(handles[i - 1].getInstruction())
-									&& GenericMethods.isInt(handles[i - 2].getInstruction())
+									&& GenericMethods.isNumber(handles[i - 1].getInstruction())
+									&& GenericMethods.isNumber(handles[i - 2].getInstruction())
 									&& (handles[i - 3].getInstruction() instanceof DUP)) {
 								/*
 																			TODO: Also you need to make the endLoc INVOKESTATIC STRING<init> or something because it is leaving a trailing command and fucking up.
@@ -86,7 +86,7 @@ public class StringFixer {
 										Type[] tp = GenericMethods.getCallArgTypes(handles[i + 1].getInstruction(), cg.getConstantPool());
 										String lasttp = tp[tp.length - 1].toString();
 										if(!lasttp.contains(type)) {
-											int tendLoc = GenericMethods.getValueOfInt(handles[i - 2].getInstruction(), cg.getConstantPool());
+											int tendLoc = GenericMethods.getValueOfNumber(handles[i - 2].getInstruction(), cg.getConstantPool());
 											if(tendLoc == (arrayLength - 1)) {
 												endLoc = i;
 												//logger.debug("End Location for BASA replacement: " + endLoc);
@@ -108,10 +108,11 @@ public class StringFixer {
 						byte[] stringBytes = new byte[arrayLength];
 						int loc = 0;
 						for(int x = startLoc; x <= endLoc; x++) {
-							if(GenericMethods.isInt(handles[x].getInstruction()) && GenericMethods.isInt(handles[x + 1].getInstruction())
+							if(GenericMethods.isNumber(handles[x].getInstruction())
+									&& GenericMethods.isNumber(handles[x + 1].getInstruction())
 									&& (handles[x + 2].getInstruction() instanceof BASTORE)
-									&& (GenericMethods.getValueOfInt(handles[x].getInstruction(), cg.getConstantPool()) == loc)) {
-								stringBytes[loc] = (byte) GenericMethods.getValueOfInt(handles[x + 1].getInstruction(), cg.getConstantPool());
+									&& (GenericMethods.getValueOfNumber(handles[x].getInstruction(), cg.getConstantPool()) == loc)) {
+								stringBytes[loc] = (byte) GenericMethods.getValueOfNumber(handles[x + 1].getInstruction(), cg.getConstantPool());
 								loc++;
 								if(loc == stringBytes.length) {
 									if(replacing) {

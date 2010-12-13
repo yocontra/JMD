@@ -56,7 +56,27 @@ public class GenericMethods {
 			return null;
 		}
 	}
-
+	public static Instruction getNewInvoke(Instruction ins, int index) {
+		if(ins instanceof INVOKESTATIC) {
+			INVOKESTATIC invst = (INVOKESTATIC) ins;
+			invst.setIndex(index);
+			return invst;
+		} else if(ins instanceof INVOKEVIRTUAL) {
+			INVOKEVIRTUAL invst = (INVOKEVIRTUAL) ins;
+			invst.setIndex(index);
+			return invst;
+		} else if(ins instanceof INVOKEINTERFACE) {
+			INVOKEINTERFACE invst = (INVOKEINTERFACE) ins;
+			invst.setIndex(index);
+			return invst;
+		} else if(ins instanceof INVOKESPECIAL) {
+			INVOKESPECIAL invst = (INVOKESPECIAL) ins;
+			invst.setIndex(index);
+			return invst;
+		} else {
+			return null;
+		}
+	}
 	public static String getCallClassName(Instruction ins, ConstantPoolGen cp) {
 		if(ins instanceof INVOKESTATIC) {
 			INVOKESTATIC invst = (INVOKESTATIC) ins;

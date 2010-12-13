@@ -337,7 +337,7 @@ public class ZKMTransformer {
 			}
 		}
 	}
-
+	//TODO: It isn't finding the last string sometimes, so shit gets all fucked up and it ends up leaving a call to static{} and extra instructions
 	public void getStringsFromZKM() {
 		for(ClassGen cg : cgs.values()) {
 			String key = findKey(cg);

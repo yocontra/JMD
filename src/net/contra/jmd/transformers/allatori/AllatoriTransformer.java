@@ -1,12 +1,11 @@
-package net.contra.jmd.allatori;
+package net.contra.jmd.transformers.allatori;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.util.InstructionFinder;
-import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.File;
 import java.util.*;
 import java.util.jar.*;
 
@@ -40,9 +39,8 @@ public class AllatoriTransformer {
 				if(isStringClass(cg) || isStringClassB(cg)) {
 					ALLATORI_CLASS = cg;
 					logger.debug("Allatori Class: " + ALLATORI_CLASS.getClassName());
-				} else {
-					cgs.put(cg.getClassName(), cg);
 				}
+				cgs.put(cg.getClassName(), cg);
 			} else {
 				NonClassEntries.add(entry, jf.getInputStream(entry));
 			}

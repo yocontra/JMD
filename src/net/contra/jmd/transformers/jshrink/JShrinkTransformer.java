@@ -1,9 +1,8 @@
-package net.contra.jmd.jshrink;
+package net.contra.jmd.transformers.jshrink;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.*;
@@ -19,7 +18,7 @@ public class JShrinkTransformer {
 	private static LogHandler logger = new LogHandler("JShrinkTransformer");
 	private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
 	String JAR_NAME;
-	ClassGen LoaderClass;
+	ClassGen LoaderClass = null;
 
 	public JShrinkTransformer(String jarfile) throws Exception {
 		File jar = new File(jarfile);
@@ -47,8 +46,13 @@ public class JShrinkTransformer {
 			}
 		}
 		logger.debug("Classes loaded from JAR");
+		if(LoaderClass == null) {
+			logger.error("Loader class not found! Class not using JShrink");
+		}
 	}
 	public boolean isLoader(ClassGen cg) {
+
+
 		if(cg.getMethods().length == 3 && cg.getMethods()[1].isStatic()
 				&& cg.getMethods()[1].isFinal()
 				&& cg.getMethods()[1].isPublic()

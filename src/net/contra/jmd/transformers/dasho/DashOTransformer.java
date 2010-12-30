@@ -1,4 +1,4 @@
-package net.contra.jmd.dasho;
+package net.contra.jmd.transformers.dasho;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;

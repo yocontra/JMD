@@ -1,12 +1,12 @@
 package net.contra.jmd;
 
-import net.contra.jmd.allatori.AllatoriTransformer;
-import net.contra.jmd.dasho.DashOTransformer;
-import net.contra.jmd.generic.*;
-import net.contra.jmd.jshrink.JShrinkTransformer;
-import net.contra.jmd.smokescreen.SmokeScreenTransformer;
+import net.contra.jmd.transformers.allatori.AllatoriTransformer;
+import net.contra.jmd.transformers.dasho.DashOTransformer;
+import net.contra.jmd.transformers.generic.*;
+import net.contra.jmd.transformers.jshrink.JShrinkTransformer;
+import net.contra.jmd.transformers.smokescreen.SmokeScreenTransformer;
 import net.contra.jmd.util.LogHandler;
-import net.contra.jmd.zkm.ZKMTransformer;
+import net.contra.jmd.transformers.zkm.ZKMTransformer;
 
 import java.util.Scanner;
 

@@ -1,10 +1,9 @@
-package net.contra.jmd.smokescreen;
+package net.contra.jmd.transformers.smokescreen;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.util.InstructionFinder;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.*;

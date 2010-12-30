@@ -8,7 +8,7 @@
 	If there is more leave it be or attempt to grab the values
 	
 	*/
-package net.contra.jmd.generic;
+package net.contra.jmd.transformers.generic;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;
@@ -77,7 +77,8 @@ public class GenericStringDeobfuscator {
 									&& cgs.get(methodCallClass).containsMethod(methodCallMethod, methodCallSig) != null) {
 								if(!cgs.get(methodCallClass).isAbstract() && !cgs.get(methodCallClass).isNative()) {
 									byte[] bit = cgs.get(methodCallClass).getJavaClass().getBytes();
-									cl = loader.loadClass(methodCallClass, bit);
+									Class cz = loader.loadClass(methodCallClass, bit);
+									cl = cz;
 									//TODO: Getting a classnotfound here. FIX IT!!!
 								} else {
 									continue;

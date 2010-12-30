@@ -1,10 +1,9 @@
-package net.contra.jmd.zkm;
+package net.contra.jmd.transformers.zkm;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.util.InstructionFinder;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.*;
@@ -18,7 +17,7 @@ import java.util.jar.*;
  */
 public class ZKMTransformer {
 	private static LogHandler logger = new LogHandler("ZKMTransformer");
-	private Map<String, ClassGen> cgs;
+	private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
 	private Map<String, ArrayList<String>> zkStrings = new HashMap<String, ArrayList<String>>();
 	String JAR_NAME;
 	private List<Field> flowObstructors = new LinkedList<Field>();
@@ -44,7 +43,6 @@ public class ZKMTransformer {
 	}
 
 	public ZKMTransformer(String jarfile) throws Exception {
-		cgs = new HashMap<String, ClassGen>();
 		File jar = new File(jarfile);
 		JAR_NAME = jarfile;
 		JarFile jf = new JarFile(jar);

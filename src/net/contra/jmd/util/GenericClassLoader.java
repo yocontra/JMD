@@ -15,6 +15,7 @@ public class GenericClassLoader extends ClassLoader {
 		//name = name.substring(0, name.lastIndexOf('.'));
 		Class c = null;
 		try {
+			//c = super.defineClass(crap, 0, crap.length);
 			c = super.defineClass(name, crap, 0, crap.length);
 		} catch(Exception e) {
 			return c;

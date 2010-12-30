@@ -1,4 +1,4 @@
-package net.contra.jmd.generic;
+package net.contra.jmd.transformers.generic;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.*;
@@ -28,7 +28,7 @@ public class Renamer {
 		Enumeration<JarEntry> entries = jf.entries();
 		//TODO: Make it not rename the main class
 		//TODO: Keep it from renaming like, methods that shouldn't be renamed and shit??
-
+		//TODO: Rename FIELDS MOTHERFUCKER
 		//Manifest jm = jf.getManifest();
 		//if(jm.getAttributes("Main-class") != null &&
 		//logger.debug("Found main class for jar: " + );

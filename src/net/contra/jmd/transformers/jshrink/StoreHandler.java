@@ -1,4 +1,4 @@
-package net.contra.jmd.jshrink;
+package net.contra.jmd.transformers.jshrink;
 
 import net.contra.jmd.util.NonClassEntries;
 

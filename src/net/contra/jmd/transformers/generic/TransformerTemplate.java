@@ -1,4 +1,4 @@
-package net.contra.jmd.generic;
+package net.contra.jmd.transformers.generic;
 
 import net.contra.jmd.util.*;
 import org.apache.bcel.classfile.ClassParser;

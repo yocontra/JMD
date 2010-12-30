@@ -53,9 +53,6 @@ public class GenericStringDeobfuscator {
 		for(ClassGen cg : cgs.values()) {
 			int replaced = 0;
 			for(Method method : cg.getMethods()) {
-				if(method.isAbstract() || method.isNative()) {
-					continue;
-				}
 				MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
 				InstructionList list = mg.getInstructionList();
 				if(list == null) {
@@ -65,33 +62,32 @@ public class GenericStringDeobfuscator {
 				for(int i = 1; i < handles.length; i++) {
 					//java.lang.reflect.Method
 					if(GenericMethods.isCall(handles[i].getInstruction()) && handles[i - 1].getInstruction() instanceof LDC) {
+
 						String methodCallClass = GenericMethods.getCallClassName(handles[i].getInstruction(), cg.getConstantPool());
 						String methodCallMethod = GenericMethods.getCallMethodName(handles[i].getInstruction(), cg.getConstantPool());
 						String methodCallSig = GenericMethods.getCallSignature(handles[i].getInstruction(), cg.getConstantPool());
+						String methodRetType = GenericMethods.getCallReturnType(handles[i].getInstruction(), cg.getConstantPool());
+
 						if(GenericMethods.getCallArgTypes(handles[i].getInstruction(), cg.getConstantPool()).length == 1
-								&& methodCallClass != null && methodCallMethod != null) {
+								&& methodCallClass != null && methodCallMethod != null && methodRetType.contains("String")) {
 							//Begin classloader bullshit
 							GenericClassLoader loader = new GenericClassLoader(GenericStringDeobfuscator.class.getClassLoader());
-							Class cl = null;
-							if(cgs.containsKey(methodCallClass)
-									&& cgs.get(methodCallClass).containsMethod(methodCallMethod, methodCallSig) != null) {
-								if(!cgs.get(methodCallClass).isAbstract() && !cgs.get(methodCallClass).isNative()) {
-									byte[] bit = cgs.get(methodCallClass).getJavaClass().getBytes();
-									Class cz = loader.loadClass(methodCallClass, bit);
-									cl = cz;
-									//TODO: Getting a classnotfound here. FIX IT!!!
-								} else {
-									continue;
-								}
+							Class cl;
+							ClassGen ourCz = cgs.get(methodCallClass);
+							if(ourCz != null && ourCz.containsMethod(methodCallMethod, methodCallSig) != null) {
+								byte[] bit = ourCz.getJavaClass().getBytes();
+								logger.debug(methodCallClass + " " + methodCallSig);
+								logger.debug(ourCz.getClassName());
+								cl = loader.loadClass(ourCz.getClassName(), bit);
 							} else {
 								continue;
 							}
 							if(cl == null) {
 								continue;
 							}
-							java.lang.reflect.Method mthd = null;
+							java.lang.reflect.Method mthd;
 							try {
-								mthd = cl.getMethod(methodCallMethod, String.class);
+								mthd = cl.getMethod(methodCallMethod, new Class<?>[] { String.class });
 								mthd.setAccessible(true);
 							} catch(NoSuchMethodException e) {
 								continue;
@@ -99,12 +95,10 @@ public class GenericStringDeobfuscator {
 
 							LDC encryptedLDC = (LDC) handles[i - 1].getInstruction();
 							String encryptedString = encryptedLDC.getValue(cg.getConstantPool()).toString();
-							String decryptedString = null;
+							String decryptedString;
 							try {
 								decryptedString = mthd.invoke(null, encryptedString).toString();
-							} catch(IllegalAccessException e) {
-								continue;
-							} catch(InvocationTargetException e) {
+							} catch(Exception e) {
 								continue;
 							}
 							logger.debug(encryptedString + " -> " + decryptedString + " in " + cg.getClassName() + "." + method.getName());
@@ -114,6 +108,8 @@ public class GenericStringDeobfuscator {
 							handles[i].setInstruction(lc);
 							handles[i - 1].setInstruction(nop);
 							replaced++;
+						} else {
+							continue;
 						}
 					}
 				}

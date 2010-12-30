@@ -77,6 +77,23 @@ public class GenericMethods {
 			return null;
 		}
 	}
+	public static String getCallReturnType(Instruction ins, ConstantPoolGen cp) {
+		if(ins instanceof INVOKESTATIC) {
+			INVOKESTATIC invst = (INVOKESTATIC) ins;
+			return invst.getReturnType(cp).toString();
+		} else if(ins instanceof INVOKEVIRTUAL) {
+			INVOKEVIRTUAL invst = (INVOKEVIRTUAL) ins;
+			return invst.getReturnType(cp).toString();
+		} else if(ins instanceof INVOKEINTERFACE) {
+			INVOKEINTERFACE invst = (INVOKEINTERFACE) ins;
+			return invst.getReturnType(cp).toString();
+		} else if(ins instanceof INVOKESPECIAL) {
+			INVOKESPECIAL invst = (INVOKESPECIAL) ins;
+			return invst.getReturnType(cp).toString();
+		} else {
+			return null;
+		}
+	}
 	public static String getCallClassName(Instruction ins, ConstantPoolGen cp) {
 		if(ins instanceof INVOKESTATIC) {
 			INVOKESTATIC invst = (INVOKESTATIC) ins;

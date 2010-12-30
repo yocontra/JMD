@@ -45,60 +45,63 @@ public class Renamer {
 			}
 		}
 	}
-	public void renameClasses(){
+
+	public void renameClasses() {
 		int classCount = 1;
-		for(ClassGen cg : cgs.values()){
-		    String className = cg.getClassName();
+		for(ClassGen cg : cgs.values()) {
+			String className = cg.getClassName();
 			String shortClassName = className.substring(className.lastIndexOf(".") + 1, className.length());
 			String newClassName = className.replace(shortClassName, "Class" + classCount);
 			cg.setClassName(newClassName);
 			tempcgs.put(newClassName, cg);
 			classCount++;
 		}
-		if(classCount > 1){
+		if(classCount > 1) {
 			logger.debug("Renamed " + classCount + " classes.");
 			cgs = tempcgs;
 		}
 	}
+
 	public void replaceMethodRefs() {
-		for(ClassGen cg : cgs.values()){
-		   for(Method m : cg.getMethods()){
-			    int replaced = 0;
-			    MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
+		for(ClassGen cg : cgs.values()) {
+			for(Method m : cg.getMethods()) {
+				int replaced = 0;
+				MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
 				InstructionList list = mg.getInstructionList();
-			    if(list == null){
-				    continue;
-			    }
+				if(list == null) {
+					continue;
+				}
 				InstructionHandle[] handles = list.getInstructionHandles();
 				for(int x = 0; x < handles.length; x++) {
-					if(GenericMethods.isCall(handles[x].getInstruction())){
+					if(GenericMethods.isCall(handles[x].getInstruction())) {
 						String oldClassName = GenericMethods.getCallClassName(handles[x].getInstruction(), cg.getConstantPool());
 						String oldMethodName = GenericMethods.getCallMethodName(handles[x].getInstruction(), cg.getConstantPool());
 						String oldSignature = GenericMethods.getCallSignature(handles[x].getInstruction(), cg.getConstantPool());
 						String mod = oldClassName + "-" + oldMethodName + "-" + oldSignature;
-						if(methodNames.containsKey(mod)){
+						if(methodNames.containsKey(mod)) {
 							//logger.debug("Accessing " + methodNames.get(mod));
 							String[] args = methodNames.get(mod).split("-");
 							String newClassName = args[0];
 							String newMethodName = args[1];
 							String newSignature = args[2];
 							int newindex = cg.getConstantPool().addMethodref(newClassName, newMethodName, newSignature);
-						    Instruction newInvoke = GenericMethods.getNewInvoke(handles[x].getInstruction(), newindex);
+							Instruction newInvoke = GenericMethods.getNewInvoke(handles[x].getInstruction(), newindex);
 							handles[x].setInstruction(newInvoke);
 							replaced++;
 						}
 					}
 				}
-			    mg.setInstructionList(list);
+				mg.setInstructionList(list);
 				mg.setMaxLocals();
 				mg.setMaxStack();
 				if(replaced > 0) {
 					logger.debug("replaced " + replaced + " methodrefs in " + m.getName());
 					cg.replaceMethod(m, mg.getMethod());
 				}
-		   }
+			}
 		}
 	}
+
 	public void renameMethods() {
 		for(ClassGen cg : cgs.values()) {
 			if(cg.isAbstract() || cg.isInterface()) {
@@ -131,7 +134,7 @@ public class Renamer {
 				cg.replaceMethod(m, mg.getMethod());
 				cg.setConstantPool(cpg);
 				//y.pb.methodsig - Class.Method04.MethodSig
-				methodNames.put(cg.getClassName() + "-" + m.getName() + "-"+ m.getSignature(), cg.getClassName() + "-" + name + "-"+ m.getSignature());
+				methodNames.put(cg.getClassName() + "-" + m.getName() + "-" + m.getSignature(), cg.getClassName() + "-" + name + "-" + m.getSignature());
 				count++;
 				logger.debug(cg.getClassName() + "." + m.getName() + " -> " + cg.getClassName() + "." + name);
 			}

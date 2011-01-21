@@ -182,7 +182,7 @@ public class ForeignCallRemover {
 
         cg.replaceMethod(method, mg.getMethod());
     }
-    public void fixDUPs() {
+    public void fixPOPs() {
         for (ClassGen cg : cgs.values()) {
             int replaced = 0;
             for (Method method : cg.getMethods()) {
@@ -193,7 +193,8 @@ public class ForeignCallRemover {
                     continue;
                 }
                 InstructionHandle[] handles = list.getInstructionHandles();
-                if (handles[0].getInstruction() instanceof DUP) {
+                if (handles[0].getInstruction() instanceof DUP || handles[0].getInstruction() instanceof ASTORE
+                        || handles[0].getInstruction() instanceof POP) {
                     handles[0].setInstruction(new NOP());
                     replaced++;
                 }
@@ -213,7 +214,7 @@ public class ForeignCallRemover {
         logger.log("Removing Foreign Calls...");
         RemoveCalls();
         logger.log("Fixing DUPs...");
-        fixDUPs();
+        fixPOPs();
         if(AuthClass != null){
             logger.log("Replacing Authentication System...");
             replaceCheckMethod();

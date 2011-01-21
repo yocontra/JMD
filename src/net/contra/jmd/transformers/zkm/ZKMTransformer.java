@@ -62,14 +62,79 @@ public class ZKMTransformer {
 		return false;
 	}
 
-	public static String findKeyC(ClassGen cg) {
+	public static char[] findKeyC(ClassGen cg) {
 		for(Method m : cg.getMethods()) {
 			if(m.getName().contains("clinit")) {
 				MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
 				InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
 				char[] keyAsChars = new char[5];
 				int found = 0;
-				for(int i = handles.length - 1; i < handles.length; i--) {
+				for(int i = handles.length - 1; i > 0; i--) {
+					if(found < 5) {
+                        //TODO: FIX THIS, THE LAST TWO CHARS FOR THE KEY ARE BEING FOUND PROPERLY BUT SAVED TO THE ARRAY WRONG
+						if((handles[i - 1].getInstruction() instanceof BIPUSH)
+								&& ((handles[i].getInstruction() instanceof GOTO && ((GOTO)handles[i].getInstruction()).getTarget().getInstruction() instanceof IXOR)
+                                || handles[i].getInstruction() instanceof IXOR)){
+							keyAsChars[found] = (char) ((BIPUSH) handles[i - 1].getInstruction()).getValue().intValue();
+							logger.debug(found + " found key char: " + (int)keyAsChars[found] + " line: " + i);
+							found++;
+                            continue;
+						}
+                        else if((handles[i - 1].getInstruction() instanceof ICONST)
+								&& ((handles[i].getInstruction() instanceof GOTO && ((GOTO)handles[i].getInstruction()).getTarget().getInstruction() instanceof IXOR)
+                                || handles[i].getInstruction() instanceof IXOR)){
+							keyAsChars[found] = (char) ((ICONST) handles[i - 1].getInstruction()).getValue().intValue();
+							found++;
+							logger.debug(found + " found key char: " + (int)keyAsChars[found] + " line: " + i);
+                            continue;
+						}
+					} else {
+						break;
+					}
+				}
+                char[] right = new char[5];
+				right[0] = keyAsChars[4];
+				right[1] = keyAsChars[3];
+				right[2] = keyAsChars[2];
+				right[3] = keyAsChars[1];
+				right[4] = keyAsChars[0];
+                for(char c : right){
+                    logger.debug("KeyChar: " + (int)c);
+                }
+				if(keyAsChars == new char[5]) {
+					logger.error("ZKM Key Method C Failed, please send in this file to be analyzed.");
+					return null;
+				} else {
+					logger.debug("ZKM Key = " + String.valueOf(right));
+					return right;
+				}
+			}
+
+		}
+		return null;
+	}
+
+	public static char[] findKeyB(ClassGen cg) {
+        return findKeyC(cg);
+        /*
+		for(Method m : cg.getMethods()) {
+			if(m.getName().contains("clinit")) {
+				MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
+				InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
+				char[] keyAsChars = new char[5];
+				int found = 0;
+                int ixor = -1;
+                for(int i = handles.length - 1; i < handles.length; i--){
+                   if(handles[i].getInstruction() instanceof IXOR){
+                       ixor = i;
+                       break;
+                   }
+                }
+                if(ixor == -1){
+                    logger.error("ZKM Key Method B Failed, attempting method C");
+					return findKeyC(cg);
+                }
+				for(int i = ixor; i > 0; i--) {
 					if(found < 5) {
 						if((handles[i - 1].getInstruction() instanceof BIPUSH)
 								&& (handles[i].getInstruction() instanceof GOTO || handles[i].getInstruction() instanceof IXOR)) {
@@ -86,75 +151,26 @@ public class ZKMTransformer {
 						break;
 					}
 				}
-				char[] right = new char[5];
+                char[] right = keyAsChars;
 				right[0] = keyAsChars[4];
 				right[1] = keyAsChars[3];
 				right[2] = keyAsChars[2];
 				right[3] = keyAsChars[1];
 				right[4] = keyAsChars[0];
 				if(keyAsChars == new char[5]) {
-					logger.error("ZKM Key Method C Failed, please send in this file to be analyzed.");
+					logger.error("ZKM Key Method B Failed, please send in this file to be analyzed.");
 					return null;
 				} else {
 					logger.debug("ZKM Key = " + String.valueOf(right));
-					return String.valueOf(right);
+					return right;
 				}
 			}
 
 		}
-		return null;
+		return null;       */
 	}
 
-	public static String findKeyB(ClassGen cg) {
-        return findKeyC(cg);
-        /*
-		for(Method m : cg.getMethods()) {
-			if(m.getName().contains("clinit")) {
-				MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
-				InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
-				char[] keyAsChars = new char[5];
-				int found = 0;
-                int end = -1;
-                for(int i = handles.length - 1; i > 0; i--){
-                    if(handles[i].getInstruction() instanceof TABLESWITCH){
-                        end = i;
-                        break;
-                    }
-                }
-                if (end == -1){
-                    logger.error("ZKM Key Method B Failed, trying method C!");
-					return findKeyC(cg);
-                }
-				for(int i = 0; i < end; i++) {
-					if(found < 5) {
-						if((handles[i].getInstruction() instanceof BIPUSH)
-								&& (handles[i + 1].getInstruction() instanceof GOTO || handles[i + 1].getInstruction() instanceof IXOR)) {
-							keyAsChars[found] = (char) ((BIPUSH) handles[i].getInstruction()).getValue().intValue();
-							found++;
-						} else if((handles[i].getInstruction() instanceof ICONST)
-								&& (handles[i + 1].getInstruction() instanceof GOTO || handles[i + 1].getInstruction() instanceof IXOR)) {
-							keyAsChars[found] = (char) ((ICONST) handles[i].getInstruction()).getValue().intValue();
-							found++;
-						}
-					} else {
-						break;
-					}
-				}
-
-				if(keyAsChars == new char[5]) {
-					logger.error("ZKM Key Method B Failed, trying method C!");
-					return findKeyC(cg);
-				} else {
-					logger.debug("ZKM Key = " + String.valueOf(keyAsChars));
-					return String.valueOf(keyAsChars);
-				}
-			}
-
-		}
-		return null;             */
-	}
-
-	public static String findKey(ClassGen cg) {
+	public static char[] findKey(ClassGen cg) {
 		if(typeA(cg)) {
 			System.out.println("Type A Found!");
 			for(Method m : cg.getMethods()) {
@@ -180,7 +196,7 @@ public class ZKMTransformer {
 						}
 					}
 				}
-				return String.valueOf(keyAsChars);
+				return keyAsChars;
 			}
 		} else {
 			for(Method m : cg.getMethods()) {
@@ -211,7 +227,7 @@ public class ZKMTransformer {
                             }
                         }
                     }
-					return String.valueOf(keyAsChars);
+					return keyAsChars;
 				}
 			}
 		}
@@ -219,9 +235,8 @@ public class ZKMTransformer {
 		return null;
 	}
 
-	public static String decrypt(String encrypted, String myKey) {
+	public static String decrypt(String encrypted, char[] key) {
 		char[] plainText = encrypted.toCharArray();
-		char[] key = myKey.toCharArray();
 		int plainTextLength = plainText.length;
 		int keyLength = key.length;
 		//
@@ -318,7 +333,9 @@ public class ZKMTransformer {
 						try {
 							list.delete(handles[startLoc], handles[endLoc]);
 						} catch(TargetLostException e) {
-							e.printStackTrace();
+                            logger.error("Control flow obfuscation evident. Couldn't clear clinit");
+							//e.printStackTrace();
+                            return;
 						}
 						logger.debug("NOPed " + (endLoc - startLoc) + " instructions from <clinit> in " + cg.getClassName());
                         list.setPositions();
@@ -334,7 +351,7 @@ public class ZKMTransformer {
 	//TODO: It isn't finding the last string sometimes, so shit gets all fucked up and it ends up leaving a call to static{} and extra instructions
 	public void getStringsFromZKM() {
 		for(ClassGen cg : cgs.values()) {
-			String key = findKey(cg);
+			char[] key = findKey(cg);
 			for(Method method : cg.getMethods()) {
 				MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
 				InstructionList list = mg.getInstructionList();

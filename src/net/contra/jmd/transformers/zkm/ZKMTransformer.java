@@ -32,16 +32,6 @@ public class ZKMTransformer {
 		return zkStrings.get(className).get(index);
 	}
 
-	public Map<String, ClassGen> getClasses() {
-		return cgs;
-	}
-
-	public ZKMTransformer(String classLoc, String className) throws Exception {
-		ClassGen cg = new ClassGen(new ClassParser(classLoc, className).parse());
-		cgs.put(className, cg);
-		logger.debug("Class loaded");
-	}
-
 	public ZKMTransformer(String jarfile) throws Exception {
 		File jar = new File(jarfile);
 		JAR_NAME = jarfile;
@@ -102,7 +92,7 @@ public class ZKMTransformer {
 				right[2] = keyAsChars[2];
 				right[3] = keyAsChars[1];
 				right[4] = keyAsChars[0];
-				if(keyAsChars == null) {
+				if(keyAsChars == new char[5]) {
 					logger.error("ZKM Key Method C Failed, please send in this file to be analyzed.");
 					return null;
 				} else {
@@ -116,13 +106,26 @@ public class ZKMTransformer {
 	}
 
 	public static String findKeyB(ClassGen cg) {
+        return findKeyC(cg);
+        /*
 		for(Method m : cg.getMethods()) {
 			if(m.getName().contains("clinit")) {
 				MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
 				InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
 				char[] keyAsChars = new char[5];
 				int found = 0;
-				for(int i = handles.length - 35; i < handles.length; i++) {
+                int end = -1;
+                for(int i = handles.length - 1; i > 0; i--){
+                    if(handles[i].getInstruction() instanceof TABLESWITCH){
+                        end = i;
+                        break;
+                    }
+                }
+                if (end == -1){
+                    logger.error("ZKM Key Method B Failed, trying method C!");
+					return findKeyC(cg);
+                }
+				for(int i = 0; i < end; i++) {
 					if(found < 5) {
 						if((handles[i].getInstruction() instanceof BIPUSH)
 								&& (handles[i + 1].getInstruction() instanceof GOTO || handles[i + 1].getInstruction() instanceof IXOR)) {
@@ -137,6 +140,7 @@ public class ZKMTransformer {
 						break;
 					}
 				}
+
 				if(keyAsChars == new char[5]) {
 					logger.error("ZKM Key Method B Failed, trying method C!");
 					return findKeyC(cg);
@@ -147,7 +151,7 @@ public class ZKMTransformer {
 			}
 
 		}
-		return null;
+		return null;             */
 	}
 
 	public static String findKey(ClassGen cg) {
@@ -184,29 +188,29 @@ public class ZKMTransformer {
 					MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
 					InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
 					char[] keyAsChars = new char[5];
-					for(int i = 0; i < handles.length; i++) {
-						if(handles[i].getInstruction() instanceof TABLESWITCH) {
-							TABLESWITCH xor = (TABLESWITCH) handles[i].getInstruction();
-							for(int a = 0; a < xor.getTargets().length; a++) {
-								Instruction target = xor.getTargets()[a].getInstruction();
-								if(GenericMethods.isNumber(target)) {
-									keyAsChars[a] = (char) GenericMethods.getValueOfNumber(target, cg.getConstantPool());
-								} else {
-									logger.error("ZKM Key Method A Failed, trying method B!");
-									return findKeyB(cg);
-								}
-							}
-							Instruction target = xor.getTarget().getInstruction();
-							if(target instanceof BIPUSH) {
-								keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
-							} else if(target instanceof ICONST) {
-								keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
-							} else {
-								logger.error("ZKM Key Method A Failed, trying method B!");
-								return findKeyB(cg);
-							}
-						}
-					}
+                    for (InstructionHandle handle : handles) {
+                        if (handle.getInstruction() instanceof TABLESWITCH) {
+                            TABLESWITCH xor = (TABLESWITCH) handle.getInstruction();
+                            for (int a = 0; a < xor.getTargets().length; a++) {
+                                Instruction target = xor.getTargets()[a].getInstruction();
+                                if (GenericMethods.isNumber(target)) {
+                                    keyAsChars[a] = (char) GenericMethods.getValueOfNumber(target, cg.getConstantPool());
+                                } else {
+                                    logger.error("ZKM Key Method A Failed, trying method B!");
+                                    return findKeyB(cg);
+                                }
+                            }
+                            Instruction target = xor.getTarget().getInstruction();
+                            if (target instanceof BIPUSH) {
+                                keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
+                            } else if (target instanceof ICONST) {
+                                keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
+                            } else {
+                                logger.error("ZKM Key Method A Failed, trying method B!");
+                                return findKeyB(cg);
+                            }
+                        }
+                    }
 					return String.valueOf(keyAsChars);
 				}
 			}
@@ -215,7 +219,7 @@ public class ZKMTransformer {
 		return null;
 	}
 
-	public static final String decrypt(String encrypted, String myKey) {
+	public static String decrypt(String encrypted, String myKey) {
 		char[] plainText = encrypted.toCharArray();
 		char[] key = myKey.toCharArray();
 		int plainTextLength = plainText.length;
@@ -228,15 +232,7 @@ public class ZKMTransformer {
 		}
 
 		// finishing
-		String str_encrypted = new String(cryptoText);
-		return str_encrypted;
-	}
-
-	private void stringTransformer() throws TargetLostException {
-		logger.log("Starting ZKM String Grabber...");
-		getStringsFromZKM();
-		logger.log("Starting ZKM String Replacer...");
-		replaceStrings();
+        return new String(cryptoText);
 	}
 
 	public void replaceStrings() throws TargetLostException {
@@ -303,17 +299,16 @@ public class ZKMTransformer {
 							String type = ((ANEWARRAY) handles[i + 1].getInstruction()).getLoadClassType(cg.getConstantPool()).toString();
 							if(type.equals("java.lang.String")) {
 								startLoc = i;
-								//logger.debug("Start Location for <clinit> removal: " + startLoc);
+								logger.debug("Start Location for <clinit> removal: " + startLoc);
 							}
 						}
 						if(startLoc >= 0) {
-							if(handles.length > (i + 7)) {
-								if(handles[i].getInstruction() instanceof NEW
-										&& handles[i + 2].getInstruction() instanceof SWAP
-										&& handles[i + 6].getInstruction() instanceof POP
-										&& handles[i + 7].getInstruction() instanceof RET) {
-									endLoc = i + 7;
-									//logger.debug("End Location for <clinit> removal: " + endLoc);
+							if(handles.length > (i + 2)) {
+								if(handles[i].getInstruction() instanceof POP
+										&& handles[i + 1].getInstruction() instanceof SWAP
+										&& handles[i + 2].getInstruction() instanceof TABLESWITCH) {
+									endLoc = i + 2;
+									logger.debug("End Location for <clinit> removal: " + endLoc);
 									break;
 								}
 							}
@@ -326,6 +321,7 @@ public class ZKMTransformer {
 							e.printStackTrace();
 						}
 						logger.debug("NOPed " + (endLoc - startLoc) + " instructions from <clinit> in " + cg.getClassName());
+                        list.setPositions();
 						mg.setInstructionList(list);
 						mg.setMaxLocals();
 						mg.setMaxStack();
@@ -452,14 +448,6 @@ public class ZKMTransformer {
 
 	public void transform() {
 		logger.log("ZKM Deobfuscator");
-		logger.log("Starting String Encryption Removal...");
-		try {
-			stringTransformer();
-		} catch(TargetLostException e) {
-			e.printStackTrace();
-		}
-		logger.log("Starting String Origin Removal...");
-		removeOriginStrings();
 		logger.log("Starting Opaque Predicate Remover...");
 		locateObstructors();
 		opaqueTransformer();
@@ -467,8 +455,17 @@ public class ZKMTransformer {
 		unconditionalBranchTransformer();
 		logger.log("Starting Exit Flow Corrector...");
 		exitFlowTransformer();
-		//logger.log("Starting Shift Simplifier...");
-		//shiftSimplifierTransformer();
+        logger.log("Starting String Encryption Removal...");
+		try {
+			logger.log("Starting ZKM String Grabber...");
+		    getStringsFromZKM();
+		    logger.log("Starting ZKM String Replacer...");
+		    replaceStrings();
+		} catch(TargetLostException e) {
+			e.printStackTrace();
+		}
+		logger.log("Starting String Origin Removal...");
+		removeOriginStrings();
 		logger.log("Deobfuscation finished! Dumping jar...");
 		GenericMethods.dumpJar(JAR_NAME, cgs.values());
 		logger.log("Operation Completed.");

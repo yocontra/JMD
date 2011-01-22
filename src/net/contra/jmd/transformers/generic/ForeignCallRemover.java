@@ -229,8 +229,8 @@ public class ForeignCallRemover {
     }
 
     public void transform() {
-        logger.log("Removing Exception Handlers...");
-        removeExceptions();
+        //logger.log("Removing Exception Handlers...");
+        //removeExceptions();
         logger.log("Removing Foreign Calls...");
         RemoveCalls();
         logger.log("Fixing DUPs...");

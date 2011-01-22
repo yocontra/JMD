@@ -1,6 +1,9 @@
 package net.contra.jmd.util;
 
-import org.apache.bcel.generic.*;
+import org.apache.bcel.generic.ConstantPoolGen;
+import org.apache.bcel.generic.INVOKESTATIC;
+import org.apache.bcel.generic.InstructionHandle;
+import org.apache.bcel.generic.LDC;
 
 /**
  * Created by IntelliJ IDEA.
@@ -9,49 +12,49 @@ import org.apache.bcel.generic.*;
  * Time: 10:16:26 PM
  */
 public class HandleSearcher {
-	InstructionHandle[] handles;
-	ConstantPoolGen cpg;
-	public int index;
+    InstructionHandle[] handles;
+    ConstantPoolGen cpg;
+    public int index;
 
-	public HandleSearcher(InstructionHandle[] handles, ConstantPoolGen cpg) {
-		this.handles = handles;
-		index = 0;
-		this.cpg = cpg;
-	}
+    public HandleSearcher(InstructionHandle[] handles, ConstantPoolGen cpg) {
+        this.handles = handles;
+        index = 0;
+        this.cpg = cpg;
+    }
 
-	public void setPosition(int index) {
-		this.index = index;
-	}
+    public void setPosition(int index) {
+        this.index = index;
+    }
 
-	public LDC previousLDC() {
-		for(; index >= 0; index--) {
+    public LDC previousLDC() {
+        for (; index >= 0; index--) {
 
-			if(handles[index].getInstruction() instanceof LDC) {
-				return (LDC) handles[index].getInstruction();
-			}
+            if (handles[index].getInstruction() instanceof LDC) {
+                return (LDC) handles[index].getInstruction();
+            }
 
-		}
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public INVOKESTATIC nextInvokeStatic(String className) {
-		for(; index < handles.length; index++) {
-			if(index > -1) {
-				if(handles[index].getInstruction() instanceof INVOKESTATIC) {
+    public INVOKESTATIC nextInvokeStatic(String className) {
+        for (; index < handles.length; index++) {
+            if (index > -1) {
+                if (handles[index].getInstruction() instanceof INVOKESTATIC) {
 
-					INVOKESTATIC methodCall = (INVOKESTATIC) handles[index].getInstruction();
+                    INVOKESTATIC methodCall = (INVOKESTATIC) handles[index].getInstruction();
 
-					if(methodCall.getClassName(cpg).equals(className)) {
-						return methodCall;
-					}
+                    if (methodCall.getClassName(cpg).equals(className)) {
+                        return methodCall;
+                    }
 
-				}
-			}
+                }
+            }
 
-		}
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

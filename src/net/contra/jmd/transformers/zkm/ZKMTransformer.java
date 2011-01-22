@@ -78,16 +78,14 @@ public class ZKMTransformer {
 							keyAsChars[found] = (char) ((BIPUSH) handles[i - 1].getInstruction()).getValue().intValue();
 							logger.debug(found + " found key char: " + (int)keyAsChars[found] + " line: " + i);
 							found++;
-                            continue;
-						}
+                        }
                         else if((handles[i - 1].getInstruction() instanceof ICONST)
 								&& ((handles[i].getInstruction() instanceof GOTO && ((GOTO)handles[i].getInstruction()).getTarget().getInstruction() instanceof IXOR)
                                 || handles[i].getInstruction() instanceof IXOR)){
 							keyAsChars[found] = (char) ((ICONST) handles[i - 1].getInstruction()).getValue().intValue();
 							found++;
 							logger.debug(found + " found key char: " + (int)keyAsChars[found] + " line: " + i);
-                            continue;
-						}
+                        }
 					} else {
 						break;
 					}
@@ -418,7 +416,7 @@ public class ZKMTransformer {
 						new InstructionFinder.CodeConstraint() {
 
 							public boolean checkCode(InstructionHandle[] code) {
-								FieldInstruction ctrlFieldInstr = null;
+								FieldInstruction ctrlFieldInstr;
 								if(code[0].getInstruction() instanceof GETSTATIC) {
 									ctrlFieldInstr = (FieldInstruction) code[0].getInstruction();
 								} else {
@@ -433,7 +431,7 @@ public class ZKMTransformer {
 					InstructionHandle[] match = matches.next();
 					Instruction first = match[0].getInstruction();
 					ClassGen ctrlClazz;
-					Field flowObstructor = null;
+					Field flowObstructor;
 					if(first instanceof GETSTATIC) {
 						PUTSTATIC pstatCtrlField = (PUTSTATIC) match[match.length - 2].getInstruction();
 						String className = pstatCtrlField.getClassName(cg.getConstantPool());

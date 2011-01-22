@@ -117,8 +117,8 @@ public class ForeignCallRemover {
                                 && !cgs.containsKey(callClass)) {
                             if (GenericMethods.getCallArgTypes(handles[i].getInstruction(), cg.getConstantPool()).length == 0) {
                                 handles[i].setInstruction(new NOP());
-                                if(handles[i+1].getInstruction() instanceof ASTORE){
-                                    handles[i+1].setInstruction(new NOP());
+                                if (handles[i + 1].getInstruction() instanceof ASTORE) {
+                                    handles[i + 1].setInstruction(new NOP());
                                 }
                                 logger.debug(callClass + "." + callMethod + " invoke had no arguments, so we NOP");
                                 replaced++;
@@ -126,8 +126,8 @@ public class ForeignCallRemover {
                                 //TODO: WRITE SOMETHING TO DETECT MULTIPLE ARGUMENTS
                                 handles[i - 1].setInstruction(new NOP());
                                 handles[i].setInstruction(new NOP());
-                                if(handles[i+1].getInstruction() instanceof ASTORE){
-                                    handles[i+1].setInstruction(new NOP());
+                                if (handles[i + 1].getInstruction() instanceof ASTORE) {
+                                    handles[i + 1].setInstruction(new NOP());
                                 }
                                 logger.debug(callClass + "." + callMethod + " invoke had arguments, so we NOP it and the line before");
                                 replaced++;
@@ -163,7 +163,24 @@ public class ForeignCallRemover {
             }
         }
     }
-    public void replaceCheckMethod(){
+
+    public void removeExceptions() {
+        for (ClassGen cg : cgs.values()) {
+            int replaced = 0;
+            for (Method method : cg.getMethods()) {
+                //logger.debug("in method " + method.getName());
+                MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
+
+                mg.removeExceptionHandlers();
+                mg.removeExceptions();
+                mg.setMaxLocals();
+                mg.setMaxStack();
+                cg.replaceMethod(method, mg.getMethod());
+            }
+        }
+    }
+
+    public void replaceCheckMethod() {
         ClassGen cg = cgs.get(AuthClass);
         Method method = cg.getMethods()[0];
         MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
@@ -182,6 +199,7 @@ public class ForeignCallRemover {
 
         cg.replaceMethod(method, mg.getMethod());
     }
+
     public void fixPOPs() {
         for (ClassGen cg : cgs.values()) {
             int replaced = 0;
@@ -203,19 +221,21 @@ public class ForeignCallRemover {
                 mg.setMaxLocals();
                 mg.setMaxStack();
                 cg.replaceMethod(method, mg.getMethod());
-                if (replaced > 0) {
-                    logger.debug("Removed " + replaced + " invalid DUPs in " + cg.getClassName());
-                }
+            }
+            if (replaced > 0) {
+                logger.debug("Removed " + replaced + " invalid POPs in " + cg.getClassName());
             }
         }
     }
 
     public void transform() {
+        logger.log("Removing Exception Handlers...");
+        removeExceptions();
         logger.log("Removing Foreign Calls...");
         RemoveCalls();
         logger.log("Fixing DUPs...");
         fixPOPs();
-        if(AuthClass != null){
+        if (AuthClass != null) {
             logger.log("Replacing Authentication System...");
             replaceCheckMethod();
         } else {

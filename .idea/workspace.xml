@@ -2,22 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5c19ffb3-2980-48ba-a407-712bf5a16688" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StackFixer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/Transformer.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/Transformer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/dasho/DashOTransformer.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/dasho/DashOTransformer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/ForeignCallRemover.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/ForeignCallRemover.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/jshrink/JShrinkTransformer.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/jshrink/JShrinkTransformer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/jshrink/StoreHandler.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/jshrink/StoreHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/smokescreen/SmokeScreenTransformer.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/smokescreen/SmokeScreenTransformer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/util/GenericClassLoader.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/util/GenericClassLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/util/GenericMethods.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/util/GenericMethods.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/util/HandleSearcher.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/util/HandleSearcher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/util/LogHandler.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/util/LogHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/util/NonClassEntries.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/util/NonClassEntries.java" />
     </list>
     <ignored path="JMD.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -80,10 +66,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ZKMTransformer.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ZKMTransformer.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="405" column="59" selection-start="19543" selection-end="19543" vertical-scroll-proportion="0.0">
+            <state line="314" column="22" selection-start="14450" selection-end="14450" vertical-scroll-proportion="0.32033426">
               <folding />
             </state>
           </provider>
@@ -98,22 +84,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StackFixer.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StackFixer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="59" selection-start="2086" selection-end="2086" vertical-scroll-proportion="0.388102">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Deobfuscator.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="58" column="16" selection-start="2736" selection-end="2736" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -153,10 +128,10 @@
         <option value="$PROJECT_DIR$/src/net/contra/jmd/util/GenericClassLoader.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/util/GenericMethods.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/GenericStringDeobfuscator.java" />
-        <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/ForeignCallRemover.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StackFixer.java" />
+        <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java" />
       </list>
     </option>
   </component>
@@ -198,8 +173,8 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -215,46 +190,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="JMD" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JMD" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JMD" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmd" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JMD" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JMD" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jmd" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="transformers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -276,9 +211,9 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RunManager" selected="Application.JMD">
     <configuration default="true" type="Remote" factoryName="Remote">
@@ -290,6 +225,24 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -318,24 +271,6 @@
       <envs />
       <properties />
       <listeners />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -390,7 +325,7 @@
     <configuration default="false" name="JMD" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.contra.jmd.Deobfuscator" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="&quot;C:/out/iDungeonPro.jar&quot; stackfixer true" />
+      <option name="PROGRAM_PARAMETERS" value="&quot;C:\out\ArbiDungeon.jar&quot; zkm true" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
@@ -460,12 +395,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="776" extended-state="6" />
-    <editor active="true" />
+    <frame x="-4" y="-4" width="1288" height="764" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918397" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32780084" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918397" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -474,11 +408,12 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1971223" sideWeight="0.22067039" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3292683" sideWeight="0.64123374" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32846716" sideWeight="0.6414791" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35876623" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3585209" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32780084" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -524,16 +459,19 @@
         <state line="115" column="21" selection-start="4143" selection-end="4143" vertical-scroll-proportion="0.4075724" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java">
+    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="405" column="59" selection-start="19543" selection-end="19543" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="58" column="16" selection-start="2736" selection-end="2736" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/TransformerTemplate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="42" selection-start="0" selection-end="1739" vertical-scroll-proportion="0.0">
+        <state line="27" column="42" selection-start="0" selection-end="1739" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StackFixer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="20" selection-start="1830" selection-end="1830" vertical-scroll-proportion="0.3281787">
           <folding />
         </state>
       </provider>
@@ -545,18 +483,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java">
+    <entry file="jar://$PROJECT_DIR$/lib/BCEL.jar!/org/apache/bcel/generic/ANEWARRAY.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="16" selection-start="2736" selection-end="2736" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="15" column="46" selection-start="748" selection-end="748" vertical-scroll-proportion="0.71257484">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StackFixer.java">
+    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="59" selection-start="2086" selection-end="2086" vertical-scroll-proportion="0.388102">
+        <state line="314" column="22" selection-start="14450" selection-end="14450" vertical-scroll-proportion="0.32033426">
           <folding />
         </state>
       </provider>

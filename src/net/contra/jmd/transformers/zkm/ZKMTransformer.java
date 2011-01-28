@@ -87,8 +87,8 @@ public class ZKMTransformer {
                                 && ((handles[i].getInstruction() instanceof GOTO && ((GOTO) handles[i].getInstruction()).getTarget().getInstruction() instanceof IXOR)
                                 || handles[i].getInstruction() instanceof IXOR)) {
                             keyAsChars[found] = (char) ((ICONST) handles[i - 1].getInstruction()).getValue().intValue();
-                            found++;
                             logger.debug(found + " found key char: " + (int) keyAsChars[found] + " line: " + i);
+                            found++;
                         }
                     } else {
                         break;
@@ -179,9 +179,9 @@ public class ZKMTransformer {
                 MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
                 InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
                 char[] keyAsChars = new char[5];
-                for (int i = 0; i < handles.length; i++) {
-                    if (handles[i].getInstruction() instanceof TABLESWITCH) {
-                        TABLESWITCH xor = (TABLESWITCH) handles[i].getInstruction();
+                for (InstructionHandle handle : handles) {
+                    if (handle.getInstruction() instanceof TABLESWITCH) {
+                        TABLESWITCH xor = (TABLESWITCH) handle.getInstruction();
                         for (int a = 0; a < xor.getTargets().length; a++) {
                             Instruction target = xor.getTargets()[a].getInstruction();
                             if (target instanceof BIPUSH) {
@@ -259,6 +259,8 @@ public class ZKMTransformer {
             for (Method method : cg.getMethods()) {
                 MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
                 InstructionList list = mg.getInstructionList();
+                if(list == null)
+                    continue;
                 InstructionHandle[] handles = list.getInstructionHandles();
                 //if (!typeA(cg)) {
                 for (int i = 0; i < handles.length; i++) {
@@ -313,7 +315,10 @@ public class ZKMTransformer {
                     for (int i = 0; i < handles.length; i++) {
                         if (((handles[i].getInstruction() instanceof BIPUSH) || (handles[i].getInstruction() instanceof SIPUSH) || (handles[i].getInstruction() instanceof ICONST))
                                 && (handles[i + 1].getInstruction() instanceof ANEWARRAY)) {
-                            String type = ((ANEWARRAY) handles[i + 1].getInstruction()).getLoadClassType(cg.getConstantPool()).toString();
+                            ANEWARRAY an = (ANEWARRAY) handles[i + 1].getInstruction();
+                            ObjectType ty = an.getLoadClassType(cg.getConstantPool());
+                            if(ty == null) continue;
+                            String type = ty.toString();
                             if (type.equals("java.lang.String")) {
                                 startLoc = i;
                                 logger.debug("Start Location for <clinit> removal: " + startLoc);
@@ -365,9 +370,11 @@ public class ZKMTransformer {
                 ArrayList<String> all = new ArrayList<String>();
                 if (method.getName().contains("clinit")) {
                     for (int i = 0; i < handles.length; i++) {
-                        if (GenericMethods.isNumber(handles[i].getInstruction()) && handles[i + 1].getInstruction() instanceof LDC) {
+                        if (GenericMethods.isNumber(handles[i].getInstruction())
+                                && handles[i + 1].getInstruction() instanceof LDC) {
                             LDC orig = ((LDC) handles[i + 1].getInstruction());
-                            String enc = (String) orig.getValue(cg.getConstantPool());
+                            if(!orig.getType(cg.getConstantPool()).getSignature().contains("String")) continue;
+                            String enc = orig.getValue(cg.getConstantPool()).toString();
                             String dec = decrypt(enc, key);
                             all.add(dec);
                             logger.debug(cg.getClassName() + " -> " + dec);

@@ -3,23 +3,15 @@ package net.contra.jmd.transformers.zkm;
 import net.contra.jmd.util.GenericMethods;
 import net.contra.jmd.util.LogHandler;
 import net.contra.jmd.util.NonClassEntries;
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.Field;
-import org.apache.bcel.classfile.Method;
+import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
-import org.apache.bcel.util.InstructionFinder;
+import org.apache.bcel.util.*;
 
 import java.io.File;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 25, 2010
- * Time: 11:38:55 PM
- */
 public class ZKMTransformer {
     private static LogHandler logger = new LogHandler("ZKMTransformer");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
@@ -259,7 +251,7 @@ public class ZKMTransformer {
             for (Method method : cg.getMethods()) {
                 MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
                 InstructionList list = mg.getInstructionList();
-                if(list == null)
+                if (list == null)
                     continue;
                 InstructionHandle[] handles = list.getInstructionHandles();
                 //if (!typeA(cg)) {
@@ -317,7 +309,7 @@ public class ZKMTransformer {
                                 && (handles[i + 1].getInstruction() instanceof ANEWARRAY)) {
                             ANEWARRAY an = (ANEWARRAY) handles[i + 1].getInstruction();
                             ObjectType ty = an.getLoadClassType(cg.getConstantPool());
-                            if(ty == null) continue;
+                            if (ty == null) continue;
                             String type = ty.toString();
                             if (type.equals("java.lang.String")) {
                                 startLoc = i;
@@ -373,7 +365,7 @@ public class ZKMTransformer {
                         if (GenericMethods.isNumber(handles[i].getInstruction())
                                 && handles[i + 1].getInstruction() instanceof LDC) {
                             LDC orig = ((LDC) handles[i + 1].getInstruction());
-                            if(!orig.getType(cg.getConstantPool()).getSignature().contains("String")) continue;
+                            if (!orig.getType(cg.getConstantPool()).getSignature().contains("String")) continue;
                             String enc = orig.getValue(cg.getConstantPool()).toString();
                             String dec = decrypt(enc, key);
                             all.add(dec);
@@ -405,7 +397,6 @@ public class ZKMTransformer {
                     String fieldName = gstatCtrlField.getFieldName(cg.getConstantPool());
                     ClassGen ctrlClazz = getClass(controlClass);
                     controlField = ctrlClazz.containsField(fieldName);
-                    break;
                 }
             }
         }
@@ -428,7 +419,7 @@ public class ZKMTransformer {
                         new InstructionFinder.CodeConstraint() {
 
                             public boolean checkCode(InstructionHandle[] code) {
-                                FieldInstruction ctrlFieldInstr;
+                                FieldInstruction ctrlFieldInstr = null;
                                 if (code[0].getInstruction() instanceof GETSTATIC) {
                                     ctrlFieldInstr = (FieldInstruction) code[0].getInstruction();
                                 } else {
@@ -443,7 +434,7 @@ public class ZKMTransformer {
                     InstructionHandle[] match = matches.next();
                     Instruction first = match[0].getInstruction();
                     ClassGen ctrlClazz;
-                    Field flowObstructor;
+                    Field flowObstructor = null;
                     if (first instanceof GETSTATIC) {
                         PUTSTATIC pstatCtrlField = (PUTSTATIC) match[match.length - 2].getInstruction();
                         String className = pstatCtrlField.getClassName(cg.getConstantPool());
@@ -475,13 +466,13 @@ public class ZKMTransformer {
 
     public void transform() {
         logger.log("ZKM Deobfuscator");
-        logger.log("Starting Opaque Predicate Remover...");
-        locateObstructors();
-        opaqueTransformer();
         logger.log("Starting Unconditional Branch Remover...");
         unconditionalBranchTransformer();
         logger.log("Starting Exit Flow Corrector...");
         exitFlowTransformer();
+        logger.log("Starting Opaque Predicate Remover...");
+        locateObstructors();
+        opaqueTransformer();
         logger.log("Starting String Encryption Removal...");
         try {
             logger.log("Starting ZKM String Grabber...");
@@ -611,7 +602,7 @@ public class ZKMTransformer {
                     }
                     if (mgen.getMethod() != method) {
                         correct++;
-                        //logger.debug("corrected exit flow in " + cg.getClassName() + "." + mgen.getName() + mgen.getSignature());
+                        logger.debug("corrected exit flow in " + cg.getClassName() + "." + mgen.getName() + mgen.getSignature());
                         mgen.setInstructionList(list);
                         mgen.setMaxLocals();
                         mgen.setMaxStack();
@@ -692,7 +683,7 @@ public class ZKMTransformer {
                         } catch (TargetLostException tlex) {
                             for (InstructionHandle target : tlex.getTargets()) {
                                 for (InstructionTargeter targeter : target.getTargeters()) {
-                                    //logger.debug("redirected " + target + " to " + toRedirect + " in " + cg.getClassName() + "." + mg.getName() + mg.getSignature());
+                                    logger.debug("redirected " + target + " to " + toRedirect + " in " + cg.getClassName() + "." + mg.getName() + mg.getSignature());
                                     targeter.updateTarget(target, toRedirect);
                                 }
                             }
@@ -705,7 +696,7 @@ public class ZKMTransformer {
                         } catch (TargetLostException tlex) {
                             for (InstructionHandle target : tlex.getTargets()) {
                                 for (InstructionTargeter targeter : target.getTargeters()) {
-                                    //logger.debug("redirected " + target + " to " + (theBranch.getInstruction() instanceof IFEQ ? lastInstr : toRedirect) + " in " + cg.getClassName() + "." + mg.getName() + mg.getSignature());
+                                    logger.debug("redirected " + target + " to " + (theBranch.getInstruction() instanceof IFEQ ? lastInstr : toRedirect) + " in " + cg.getClassName() + "." + mg.getName() + mg.getSignature());
                                     targeter.updateTarget(target, theBranch.getInstruction() instanceof IFEQ ?
                                             lastInstr : toRedirect);
                                 }

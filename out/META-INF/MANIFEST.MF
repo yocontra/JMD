@@ -1,4 +1,3 @@
 Manifest-Version: 1.0
-Class-Path: BCEL.jar
 Main-Class: net.contra.jmd.Deobfuscator
 

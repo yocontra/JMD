@@ -108,27 +108,6 @@ public class AllatoriTransformer {
         logger.log("Operation Completed.");
     }
 
-    public void ObfuscateStrings() {
-        for (ClassGen cg : cgs.values()) {
-            int replaced = 0;
-            for (Method method : cg.getMethods()) {
-                MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
-                InstructionList list = mg.getInstructionList();
-                if (list == null) {
-                    continue;
-                }
-                InstructionFinder finder = new InstructionFinder(list);
-                Iterator<InstructionHandle[]> matches = finder.search("LDC");
-                while (matches.hasNext()) {
-                    InstructionHandle[] match = matches.next();
-                    /*
-                                             INVOKESTATIC inv = new INVOKESTATIC(22);
-                                             list.insert(match, (INSTRUCTION)inv);  */
-                }
-            }
-        }
-    }
-
     public void replaceStrings() throws TargetLostException {
         for (ClassGen cg : cgs.values()) {
             int replaced = 0;
@@ -140,20 +119,20 @@ public class AllatoriTransformer {
                 }
                 InstructionHandle[] handles = list.getInstructionHandles();
                 for (int i = 1; i < handles.length; i++) {
-                    if ((handles[i].getInstruction() instanceof INVOKESTATIC) && (handles[i - 1].getInstruction() instanceof LDC)) {
-                        INVOKESTATIC methodCall = (INVOKESTATIC) handles[i].getInstruction();
-                        if (methodCall.getClassName(cg.getConstantPool()).contains(ALLATORI_CLASS.getClassName())) {
-                            LDC encryptedLDC = (LDC) handles[i - 1].getInstruction();
-                            String encryptedString = encryptedLDC.getValue(cg.getConstantPool()).toString();
-                            String decryptedString = decrypt(encryptedString);
-                            logger.debug(encryptedString + " -> " + decryptedString + " in " + cg.getClassName() + "." + method.getName());
-                            int stringRef = cg.getConstantPool().addString(decryptedString);
-                            LDC lc = new LDC(stringRef);
-                            NOP nop = new NOP();
-                            handles[i].setInstruction(lc);
-                            handles[i - 1].setInstruction(nop);
-                            replaced++;
-                        }
+                    if (handles[i].getInstruction() instanceof INVOKESTATIC && handles[i - 1].getInstruction() instanceof LDC) {
+                            INVOKESTATIC methodCall = (INVOKESTATIC) handles[i].getInstruction();
+                            if (methodCall.getClassName(cg.getConstantPool()).contains(ALLATORI_CLASS.getClassName())) {
+                                LDC encryptedLDC = (LDC) handles[i - 1].getInstruction();
+                                String encryptedString = encryptedLDC.getValue(cg.getConstantPool()).toString();
+                                String decryptedString = decrypt(encryptedString);
+                                logger.debug(encryptedString + " -> " + decryptedString + " in " + cg.getClassName() + "." + method.getName());
+                                int stringRef = cg.getConstantPool().addString(decryptedString);
+                                LDC lc = new LDC(stringRef);
+                                NOP nop = new NOP();
+                                handles[i].setInstruction(lc);
+                                handles[i - 1].setInstruction(nop);
+                                replaced++;
+                            }
                     }
                 }
                 mg.setInstructionList(list);

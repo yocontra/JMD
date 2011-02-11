@@ -18,19 +18,19 @@ import java.util.Scanner;
  */
 public class Deobfuscator {
     public static boolean debug = false;
-    private static double version = 1.5;
+    private static double version = 1.6;
     private static String credits = "skoalman, super_, ollie, popcorn89, the prophecy, and saevion";
     private static LogHandler logger = new LogHandler("Deobfuscator");
     //TODO: Load single class files... herpa derp
 
     public static void main(String[] argv) throws Exception {
         logger.message("Java Multi-Purpose Deobfuscator");
-        logger.message("Please Visit RSCBUnlocked.net for updates and info");
+        logger.message("Please Visit RECoders.org for updates and info");
         logger.message("Version " + version);
-        logger.message("Created by Contra");
+        logger.message("Created by Contra. Please read LICENSE.txt");
         logger.message("Tons of code from " + credits);
         if (!(argv.length >= 3)) {
-            logger.error("java -jar JMD.jar <file location> <type> <debug> <optional args>");
+            logger.error("java -jar JMD.jar <file location> <type> <debug true/false> <optional args>");
             logger.error("Example ZKM: java -jar JMD.jar \"C:/Files/Magic.jar\" zkm true");
             logger.error("Example StringScan: java -jar JMD.jar \"C:/Files/Magic.jar\" stringscanner \"rscheata.net\" false");
             logger.error("Example StringReplace: java -jar JMD.jar \"C:/Files/Magic.jar\" stringreplacer \"rscheata.net\" true \"rscbunlocked.net\"");

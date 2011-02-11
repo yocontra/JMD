@@ -11,13 +11,6 @@ import java.util.Collection;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Administrator
- * Date: Dec 2, 2010
- * Time: 8:29:08 AM
- * To change this template use File | Settings | File Templates.
- */
 public class GenericMethods {
     //TODO: Get LDC_W into isInt and getValueOfInt
     public static boolean isNumber(Instruction ins) {
@@ -146,7 +139,7 @@ public class GenericMethods {
             }
             jos.closeEntry();
             jos.close();
-        } catch (IOException ioe) {
+        } catch (IOException ignored) {
         }
     }
 

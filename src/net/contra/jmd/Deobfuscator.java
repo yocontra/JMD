@@ -76,10 +76,11 @@ public class Deobfuscator {
             StringScanner us = new StringScanner(argv[0], argv[3], true, argv[4]);
             us.scan();
         } else {
-            logger.error("Types are: ZKM, Allatori, JShrink, DashO, StringFixer, StringScanner, and StringReplacer (not case sensitive)");
+            logger.error("Types are: ZKM, Allatori, JShrink, DashO, SmokeScreen, StringFixer, StringScanner, " +
+                    "\n ForeignCallRemover, GenericStringDeobfuscator, StackFixer, StringFixer, Renamer, and StringReplacer (not case sensitive)");
         }
         Scanner in = new Scanner(System.in);
-        logger.message("Press enter to exit...");
+        logger.message("Press any key to exit...");
         in.nextLine();
     }
 }

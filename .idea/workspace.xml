@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5c19ffb3-2980-48ba-a407-712bf5a16688" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JMD.iml" afterPath="$PROJECT_DIR$/JMD.iml" />
-    </list>
+    <list default="true" id="5c19ffb3-2980-48ba-a407-712bf5a16688" name="Default" comment="" />
     <ignored path="JMD.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -83,7 +80,7 @@
       <file leaf-file-name="Deobfuscator.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="25" selection-start="3366" selection-end="3366" vertical-scroll-proportion="0.5568513">
+            <state line="72" column="60" selection-start="3566" selection-end="3566" vertical-scroll-proportion="0.70553935">
               <folding />
             </state>
           </provider>
@@ -383,7 +380,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1288" height="764" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918397" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -397,7 +394,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3998378" sideWeight="0.6157556" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33090025" sideWeight="0.6157556" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38424438" sideWeight="0.99651265" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38424438" sideWeight="0.99651265" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32780084" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -489,7 +486,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="25" selection-start="3366" selection-end="3366" vertical-scroll-proportion="0.5568513">
+        <state line="72" column="60" selection-start="3566" selection-end="3566" vertical-scroll-proportion="0.70553935">
           <folding />
         </state>
       </provider>

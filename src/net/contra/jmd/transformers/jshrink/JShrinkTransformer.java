@@ -39,7 +39,7 @@ public class JShrinkTransformer {
             if (entry.getName().endsWith(".class")) {
                 ClassGen cg = new ClassGen(new ClassParser(jf.getInputStream(entry), entry.getName()).parse());
                 String className = entry.getName().replace(".class", "").replace("\\", "/").replace("/", ".");
-                if (isLoader(cg)) {
+                if (isLoader(cg) && LoaderClass == null) {
                     logger.debug("Found JShrink Loader! " + cg.getClassName());
                     LoaderClass = cg;
                 } else {

@@ -62,7 +62,6 @@ public class StringScanner {
                 } else {
                     break;
                 }
-                ConstantPoolGen cpg = cg.getConstantPool();
                 for (int x = 0; x < handles.length; x++) {
                     if (handles[x].getInstruction() instanceof LDC) {
                         LDC newldc = (LDC) handles[x].getInstruction();
@@ -78,6 +77,12 @@ public class StringScanner {
                             }
                         }
                     }
+                }
+                if (replaceMode) {
+                    list.setPositions();
+                    mg.setMaxLocals();
+                    mg.setMaxStack();
+                    cg.replaceMethod(m, mg.getMethod());
                 }
             }
         }

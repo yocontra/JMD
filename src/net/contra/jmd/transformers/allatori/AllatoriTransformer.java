@@ -6,12 +6,10 @@ import net.contra.jmd.util.NonClassEntries;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.*;
-import org.apache.bcel.util.InstructionFinder;
 
 import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -76,7 +74,7 @@ public class AllatoriTransformer {
         return false;
     }
 
-    public static String decrypt(String string) {
+    public static String decode(String string) {
         int i = 85;
         char[] cs = new char[string.length()];
         int pos = cs.length - 1;
@@ -99,7 +97,23 @@ public class AllatoriTransformer {
 
         return new String(cs);
     }
-
+   	public static String decodeContext(String encrypted, String callingClass, String callingMethod) {
+		String keyString = callingClass + callingMethod;
+		int lastKeyIndex = keyString.length() - 1;
+		int xor = 85;
+		int keyIndex = lastKeyIndex;
+		int length = encrypted.length();
+		char[] cs = new char[length];
+		for (int i = length - 1; i >= 0; i--) {
+			if (keyIndex < 0) {
+				keyIndex = lastKeyIndex;
+			}
+			char keyChar = keyString.charAt(keyIndex--);
+			cs[i] = (char) (keyChar ^ (encrypted.charAt(i) ^ xor));
+			xor = (char) (63 & (xor ^ (i ^ keyChar)));
+		}
+		return new String(cs);
+	}
     public void transform() throws TargetLostException {
         logger.log("Starting Encrypted String Removal...");
         replaceStrings();
@@ -124,7 +138,8 @@ public class AllatoriTransformer {
                             if (methodCall.getClassName(cg.getConstantPool()).contains(ALLATORI_CLASS.getClassName())) {
                                 LDC encryptedLDC = (LDC) handles[i - 1].getInstruction();
                                 String encryptedString = encryptedLDC.getValue(cg.getConstantPool()).toString();
-                                String decryptedString = decrypt(encryptedString);
+                                String decryptedString = decodeContext(encryptedString, cg.getClassName(), method.getName());
+                                //String decryptedString = decode(encryptedString);
                                 logger.debug(encryptedString + " -> " + decryptedString + " in " + cg.getClassName() + "." + method.getName());
                                 int stringRef = cg.getConstantPool().addString(decryptedString);
                                 LDC lc = new LDC(stringRef);

@@ -21,10 +21,6 @@ public class ZKMTransformer {
     private Field controlField = null;
     private String controlClass = "";
 
-    public ClassGen getClass(String className) {
-        return cgs.get(className);
-    }
-
     public String getZKMString(String className, int index) {
         return zkStrings.get(className).get(index);
     }
@@ -395,7 +391,7 @@ public class ZKMTransformer {
                     GETSTATIC gstatCtrlField = (GETSTATIC) match[0].getInstruction();
                     controlClass = gstatCtrlField.getClassName(cg.getConstantPool());
                     String fieldName = gstatCtrlField.getFieldName(cg.getConstantPool());
-                    ClassGen ctrlClazz = getClass(controlClass);
+                    ClassGen ctrlClazz = cgs.get(controlClass);
                     controlField = ctrlClazz.containsField(fieldName);
                 }
             }
@@ -439,7 +435,7 @@ public class ZKMTransformer {
                         PUTSTATIC pstatCtrlField = (PUTSTATIC) match[match.length - 2].getInstruction();
                         String className = pstatCtrlField.getClassName(cg.getConstantPool());
                         String fieldName = pstatCtrlField.getFieldName(cg.getConstantPool());
-                        ctrlClazz = getClass(className);
+                        ctrlClazz = cgs.get(className);
                         flowObstructor = ctrlClazz.containsField(fieldName);
                     } else {
                         ILOAD iLoad = (ILOAD) first;
@@ -451,7 +447,7 @@ public class ZKMTransformer {
                         GETSTATIC gstatCtrlField = (GETSTATIC) iStoreHandle.getPrev().getInstruction();
                         String className = gstatCtrlField.getClassName(cg.getConstantPool());
                         String fieldName = gstatCtrlField.getFieldName(cg.getConstantPool());
-                        ctrlClazz = getClass(className);
+                        ctrlClazz = cgs.get(className);
                         flowObstructor = ctrlClazz.containsField(fieldName);
                     }
                     if (!flowObstructors.contains(flowObstructor)) {
@@ -466,10 +462,6 @@ public class ZKMTransformer {
 
     public void transform() {
         logger.log("ZKM Deobfuscator");
-        logger.log("Starting Unconditional Branch Remover...");
-        unconditionalBranchTransformer();
-        logger.log("Starting Exit Flow Corrector...");
-        exitFlowTransformer();
         logger.log("Starting Opaque Predicate Remover...");
         locateObstructors();
         opaqueTransformer();
@@ -484,6 +476,10 @@ public class ZKMTransformer {
         }
         logger.log("Starting String Origin Removal...");
         removeOriginStrings();
+        logger.log("Starting Unconditional Branch Remover...");
+        unconditionalBranchTransformer();
+        logger.log("Starting Exit Flow Corrector...");
+        exitFlowTransformer();
         logger.log("Deobfuscation finished! Dumping jar...");
         GenericMethods.dumpJar(JAR_NAME, cgs.values());
         logger.log("Operation Completed.");

@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5c19ffb3-2980-48ba-a407-712bf5a16688" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StringScanner.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StringScanner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java" afterPath="$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java" />
     </list>
     <ignored path="JMD.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -76,25 +75,16 @@
       <file leaf-file-name="AllatoriTransformer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="146" column="51" selection-start="5986" selection-end="5986" vertical-scroll-proportion="0.0">
+            <state line="128" column="102" selection-start="4461" selection-end="4461" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StringScanner.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StringScanner.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="77" column="38" selection-start="3173" selection-end="3173" vertical-scroll-proportion="0.55921054">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Deobfuscator.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Deobfuscator.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="32" selection-start="3437" selection-end="3437" vertical-scroll-proportion="0.0">
+            <state line="39" column="62" selection-start="1847" selection-end="1847" vertical-scroll-proportion="0.5096899">
               <folding />
             </state>
           </provider>
@@ -125,11 +115,11 @@
         <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StackFixer.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/util/GenericMethods.java" />
         <option value="$PROJECT_DIR$/LICENSE.txt" />
-        <option value="$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/jshrink/JShrinkTransformer.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/zkm/ZKMTransformer.java" />
-        <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java" />
         <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StringScanner.java" />
+        <option value="$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java" />
+        <option value="$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java" />
       </list>
     </option>
   </component>
@@ -171,6 +161,9 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Favorites" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -271,9 +264,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="Favorites" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -289,9 +279,9 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="Regex">
     <option name="pos1" value="218" />
@@ -314,24 +304,6 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -360,6 +332,24 @@
       <envs />
       <properties />
       <listeners />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -414,7 +404,7 @@
     <configuration default="false" name="JMD" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.contra.jmd.Deobfuscator" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="&quot;C:\out\WCLegend.jar&quot; allatori true" />
+      <option name="PROGRAM_PARAMETERS" value="&quot;C:\out\Loader.jar&quot; allatori-strong true" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
@@ -484,7 +474,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1288" height="764" extended-state="6" />
+    <frame x="-4" y="-4" width="1688" height="1014" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918397" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -497,9 +487,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1971223" sideWeight="0.22067039" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3998378" sideWeight="0.6157556" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32927817" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3288426" sideWeight="0.6191537" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38117284" sideWeight="0.99651265" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38084632" sideWeight="0.99651265" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Regex" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -595,21 +585,23 @@
         <state line="13" column="32" selection-start="265" selection-end="265" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java">
+    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StringScanner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="32" selection-start="3437" selection-end="3437" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="146" column="51" selection-start="5986" selection-end="5986" vertical-scroll-proportion="0.0">
+        <state line="62" column="39" selection-start="2214" selection-end="2214" vertical-scroll-proportion="0.19977038">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/generic/StringScanner.java">
+    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/transformers/allatori/AllatoriTransformer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="38" selection-start="3173" selection-end="3173" vertical-scroll-proportion="0.55921054">
+        <state line="128" column="102" selection-start="4461" selection-end="4461" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/contra/jmd/Deobfuscator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="62" selection-start="1847" selection-end="1847" vertical-scroll-proportion="0.5096899">
           <folding />
         </state>
       </provider>

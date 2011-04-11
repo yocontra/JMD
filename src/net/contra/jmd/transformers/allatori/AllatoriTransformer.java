@@ -26,9 +26,11 @@ public class AllatoriTransformer {
     Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
     ClassGen ALLATORI_CLASS;
     String JAR_NAME;
+    boolean isStrong = false;
 
-    public AllatoriTransformer(String jarfile) throws Exception {
+    public AllatoriTransformer(String jarfile, boolean strong) throws Exception {
         logger.log("Allatori Deobfuscator");
+        isStrong = strong;
         File jar = new File(jarfile);
         JAR_NAME = jarfile;
         JarFile jf = new JarFile(jar);
@@ -138,8 +140,12 @@ public class AllatoriTransformer {
                             if (methodCall.getClassName(cg.getConstantPool()).contains(ALLATORI_CLASS.getClassName())) {
                                 LDC encryptedLDC = (LDC) handles[i - 1].getInstruction();
                                 String encryptedString = encryptedLDC.getValue(cg.getConstantPool()).toString();
-                                String decryptedString = decodeContext(encryptedString, cg.getClassName(), method.getName());
-                                //String decryptedString = decode(encryptedString);
+                                String decryptedString;
+                                if(isStrong){
+                                    decryptedString = decodeContext(encryptedString, cg.getClassName(), method.getName());
+                                } else {
+                                    decryptedString = decode(encryptedString);
+                                }
                                 logger.debug(encryptedString + " -> " + decryptedString + " in " + cg.getClassName() + "." + method.getName());
                                 int stringRef = cg.getConstantPool().addString(decryptedString);
                                 LDC lc = new LDC(stringRef);

@@ -43,7 +43,10 @@ public class Deobfuscator {
             ZKMTransformer zt = new ZKMTransformer(argv[0]);
             zt.transform();
         } else if (argv[1].toLowerCase().equals("allatori")) {
-            AllatoriTransformer at = new AllatoriTransformer(argv[0]);
+            AllatoriTransformer at = new AllatoriTransformer(argv[0], false);
+            at.transform();
+        } else if (argv[1].toLowerCase().equals("allatori-strong")) {
+            AllatoriTransformer at = new AllatoriTransformer(argv[0], true);
             at.transform();
         } else if (argv[1].toLowerCase().equals("jshrink")) {
             JShrinkTransformer jt = new JShrinkTransformer(argv[0]);

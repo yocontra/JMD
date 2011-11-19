@@ -30,6 +30,7 @@ JMDGUI.exe provides an optional frontend to the command line interface.
 ## Download
 
 Stable releases: https://github.com/Contra/JMD/downloads
+
 Latest release (most likely stable): Get the files from the repo
 
 ## Requirements

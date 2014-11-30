@@ -367,9 +367,8 @@ public class ZKMTransformer {
                 ArrayList<String> all = new ArrayList<String>();
                 if (method.getName().contains("clinit")) {
                     for (int i = 0; i < handles.length; i++) {
-                        if (GenericMethods.isNumber(handles[i].getInstruction())
-                                && handles[i + 1].getInstruction() instanceof LDC) {
-                            LDC orig = ((LDC) handles[i + 1].getInstruction());
+                        if (handles[i].getInstruction() instanceof LDC) {
+                            LDC orig = ((LDC) handles[i].getInstruction());
                             if (!orig.getType(cg.getConstantPool()).getSignature().contains("String")) continue;
                             String enc = orig.getValue(cg.getConstantPool()).toString();
                             String dec = decrypt(enc, key);

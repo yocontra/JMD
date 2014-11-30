@@ -164,29 +164,31 @@ public class ZKMTransformer {
         if (typeA(cg)) {
             System.out.println("Type A Found!");
             for (Method m : cg.getMethods()) {
-                MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
-                InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
-                char[] keyAsChars = new char[5];
-                for (InstructionHandle handle : handles) {
-                    if (handle.getInstruction() instanceof TABLESWITCH) {
-                        TABLESWITCH xor = (TABLESWITCH) handle.getInstruction();
-                        for (int a = 0; a < xor.getTargets().length; a++) {
-                            Instruction target = xor.getTargets()[a].getInstruction();
+                if (m.getArgumentTypes().length == 1 && m.getArgumentTypes()[0].equals(Type.getType(char[].class))) {
+                    MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
+                    InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
+                    char[] keyAsChars = new char[5];
+                    for (InstructionHandle handle : handles) {
+                        if (handle.getInstruction() instanceof TABLESWITCH) {
+                            TABLESWITCH xor = (TABLESWITCH) handle.getInstruction();
+                            for (int a = 0; a < xor.getTargets().length; a++) {
+                                Instruction target = xor.getTargets()[a].getInstruction();
+                                if (target instanceof BIPUSH) {
+                                    keyAsChars[a] = (char) ((BIPUSH) target).getValue().intValue();
+                                } else {
+                                    keyAsChars[a] = (char) ((ICONST) target).getValue().intValue();
+                                }
+                            }
+                            Instruction target = xor.getTarget().getInstruction();
                             if (target instanceof BIPUSH) {
-                                keyAsChars[a] = (char) ((BIPUSH) target).getValue().intValue();
+                                keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
                             } else {
-                                keyAsChars[a] = (char) ((ICONST) target).getValue().intValue();
+                                keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
                             }
                         }
-                        Instruction target = xor.getTarget().getInstruction();
-                        if (target instanceof BIPUSH) {
-                            keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
-                        } else {
-                            keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
-                        }
                     }
+                    return keyAsChars;
                 }
-                return keyAsChars;
             }
         } else {
             for (Method m : cg.getMethods()) {

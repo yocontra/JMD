@@ -582,9 +582,11 @@ public class ZKMTransformer {
                             if (athrowInstr == list.getEnd()) {
                                 toRedirect = astoreInstr.getPrev();
                             }
-                            for (InstructionHandle target : tlex.getTargets()) {
-                                for (InstructionTargeter targeter : target.getTargeters()) {
-                                    targeter.updateTarget(target, toRedirect);
+                            if (toRedirect != null) {
+                                for (InstructionHandle target : tlex.getTargets()) {
+                                    for (InstructionTargeter targeter : target.getTargeters()) {
+                                        targeter.updateTarget(target, toRedirect);
+                                    }
                                 }
                             }
                         }

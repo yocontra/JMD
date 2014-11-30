@@ -195,36 +195,43 @@ public class ZKMTransformer {
                 if (m.getName().contains("clinit")) {
                     MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
                     InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
-                    char[] keyAsChars = new char[5];
+                    char[] keyAsChars;
                     for (InstructionHandle handle : handles) {
                         if (handle.getInstruction() instanceof TABLESWITCH) {
                             TABLESWITCH xor = (TABLESWITCH) handle.getInstruction();
-                            for (int a = 0; a < xor.getTargets().length; a++) {
-                                Instruction target = xor.getTargets()[a].getInstruction();
-                                if (GenericMethods.isNumber(target)) {
-                                    keyAsChars[a] = (char) GenericMethods.getValueOfNumber(target, cg.getConstantPool());
-                                } else {
-                                    logger.error("ZKM Key Method A Failed, trying method B!");
-                                    return findKeyB(cg);
-                                }
-                            }
-                            Instruction target = xor.getTarget().getInstruction();
-                            if (target instanceof BIPUSH) {
-                                keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
-                            } else if (target instanceof ICONST) {
-                                keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
-                            } else {
-                                logger.error("ZKM Key Method A Failed, trying method B!");
-                                return findKeyB(cg);
+                            keyAsChars = getKeyFromSwitch(xor, cg);
+                            if (keyAsChars != null) {
+                                return keyAsChars;
                             }
                         }
                     }
-                    return keyAsChars;
+                    return findKeyB(cg);
                 }
             }
         }
 
         return null;
+    }
+
+    private static char[] getKeyFromSwitch(TABLESWITCH xor, ClassGen cg) {
+        char[] keyAsChars = new char[5];
+        for (int a = 0; a < xor.getTargets().length; a++) {
+            Instruction target = xor.getTargets()[a].getInstruction();
+            if (GenericMethods.isNumber(target)) {
+                keyAsChars[a] = (char) GenericMethods.getValueOfNumber(target, cg.getConstantPool());
+            } else {
+                return null;
+            }
+        }
+        Instruction target = xor.getTarget().getInstruction();
+        if (target instanceof BIPUSH) {
+            keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
+        } else if (target instanceof ICONST) {
+            keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
+        } else {
+            return null;
+        }
+        return keyAsChars;
     }
 
     public static String decrypt(String encrypted, char[] key) {

@@ -1,5 +1,8 @@
 **JMD is a general purpose Java bytecode deobfuscation tool**
 
+## Travis CI
+[![Build Status](https://travis-ci.org/contra/JMD.svg?branch=master)](https://travis-ci.org/contra/JMD)
+
 ## Project Status
 
 JMD has been discontinued due to lack of time and was last updated November 24, 2010.

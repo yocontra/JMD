@@ -1,5 +1,6 @@
 package net.contra.jmd.transformers.dasho;
 
+import net.contra.jmd.transformers.Transformer;
 import net.contra.jmd.util.LogHandler;
 import net.contra.jmd.util.NonClassEntries;
 import org.apache.bcel.classfile.ClassParser;
@@ -18,13 +19,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 30, 2010
- * Time: 4:52:48 AM
- */
-public class DashOTransformer {
+public class DashOTransformer implements Transformer {
     private static LogHandler logger = new LogHandler("DashOTransformer");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
     String JAR_NAME;

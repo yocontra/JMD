@@ -1,5 +1,6 @@
 package net.contra.jmd.transformers.jshrink;
 
+import net.contra.jmd.transformers.Transformer;
 import net.contra.jmd.util.GenericMethods;
 import net.contra.jmd.util.LogHandler;
 import net.contra.jmd.util.NonClassEntries;
@@ -14,13 +15,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 28, 2010
- * Time: 2:43:03 PM
- */
-public class JShrinkTransformer {
+public class JShrinkTransformer implements Transformer {
     private static LogHandler logger = new LogHandler("JShrinkTransformer");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
     String JAR_NAME;

@@ -1,5 +1,6 @@
 package net.contra.jmd.transformers.smokescreen;
 
+import net.contra.jmd.transformers.Transformer;
 import net.contra.jmd.util.GenericMethods;
 import net.contra.jmd.util.LogHandler;
 import net.contra.jmd.util.NonClassEntries;
@@ -16,13 +17,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Dec 2, 2010
- * Time: 10:38:48 PM
- */
-public class SmokeScreenTransformer {
+public class SmokeScreenTransformer implements Transformer {
     private static LogHandler logger = new LogHandler("SmokeScreenTransformer");
     private Map<String, ClassGen> cgs;
     private Map<String, String> ssStrings = new HashMap<String, String>();

@@ -1,5 +1,6 @@
 package net.contra.jmd.transformers.zkm;
 
+import net.contra.jmd.transformers.Transformer;
 import net.contra.jmd.util.GenericMethods;
 import net.contra.jmd.util.LogHandler;
 import net.contra.jmd.util.NonClassEntries;
@@ -12,7 +13,7 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class ZKMTransformer {
+public class ZKMTransformer implements Transformer {
     private static LogHandler logger = new LogHandler("ZKMTransformer");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
     private Map<String, ArrayList<String>> zkStrings = new HashMap<String, ArrayList<String>>();

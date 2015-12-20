@@ -1,5 +1,6 @@
 package net.contra.jmd.transformers.allatori;
 
+import net.contra.jmd.transformers.Transformer;
 import net.contra.jmd.util.GenericMethods;
 import net.contra.jmd.util.LogHandler;
 import net.contra.jmd.util.NonClassEntries;
@@ -14,14 +15,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 24, 2010
- * Time: 9:48:40 PM
- * To change this template use File | Settings | File Templates.
- */
-public class AllatoriTransformer {
+public class AllatoriTransformer implements Transformer {
     LogHandler logger = new LogHandler("AllatoriTransformer");
     Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
     ClassGen ALLATORI_CLASS;
@@ -116,6 +110,7 @@ public class AllatoriTransformer {
 		}
 		return new String(cs);
 	}
+
     public void transform() throws TargetLostException {
         logger.log("Starting Encrypted String Removal...");
         replaceStrings();

@@ -7,6 +7,7 @@ import net.contra.jmd.transformers.jshrink.JShrinkTransformer;
 import net.contra.jmd.transformers.smokescreen.SmokeScreenTransformer;
 import net.contra.jmd.transformers.zkm.ZKMTransformer;
 import net.contra.jmd.util.LogHandler;
+import net.contra.jmd.util.VersionUtil;
 
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ import java.util.Scanner;
  */
 public class Deobfuscator {
     public static boolean debug = false;
-    private static double version = 1.6;
+    private static String version = VersionUtil.getVersion();
     private static String credits = "skoalman, super_, ollie, popcorn89, the prophecy, and saevion";
     private static LogHandler logger = new LogHandler("Deobfuscator");
     //TODO: Load single class files... herpa derp

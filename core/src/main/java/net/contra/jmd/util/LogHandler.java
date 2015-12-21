@@ -1,13 +1,5 @@
 package net.contra.jmd.util;
 
-import net.contra.jmd.Deobfuscator;
-
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 27, 2010
- * Time: 8:51:16 PM
- */
 public class LogHandler {
     private String _className = "NoClass";
 
@@ -24,9 +16,7 @@ public class LogHandler {
     }
 
     public void debug(String msg) {
-        if (Deobfuscator.debug) {
             System.out.println("[" + _className + "]" + "[DEBUG]" + msg);
-        }
     }
 
     public void error(String msg) {

@@ -1,1 +1,3 @@
 rootProject.name = 'jmd'
+
+include ':cmd', ':core'

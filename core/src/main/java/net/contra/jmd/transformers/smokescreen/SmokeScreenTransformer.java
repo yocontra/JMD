@@ -23,16 +23,8 @@ public class SmokeScreenTransformer implements Transformer {
     private Map<String, String> ssStrings = new HashMap<String, String>();
     String JAR_NAME;
 
-    public ClassGen getClass(String className) {
-        return cgs.get(className);
-    }
-
     public String getActualString(String className, int i1, int i2) {
         return ssStrings.get(className).substring(i1, i2);
-    }
-
-    public String getZaString(String className) {
-        return ssStrings.get(className);
     }
 
     public void replaceStrings() {
@@ -105,10 +97,6 @@ public class SmokeScreenTransformer implements Transformer {
         }
     }
 
-    public Map<String, ClassGen> getClasses() {
-        return cgs;
-    }
-
     public SmokeScreenTransformer(String jarfile) throws Exception {
         cgs = new HashMap<String, ClassGen>();
         File jar = new File(jarfile);
@@ -131,15 +119,14 @@ public class SmokeScreenTransformer implements Transformer {
         logger.debug("Classes loaded from JAR");
     }
 
-    public static final String decrypt(String encrypted, int myKey) {
+    public static String decrypt(String encrypted, int myKey) {
         int key = myKey;
         char[] encChars = encrypted.toCharArray();
         char[] tmpChars = new char[encChars.length];
         for (int j = 0; j < encChars.length; j++) {
-            int count = j;
             tmpChars = encChars;
-            tmpChars[count] = (char) (tmpChars[count] ^ key);
-            key = (char) (key + encChars[count] & 0x3E);
+            tmpChars[j] = (char) (tmpChars[j] ^ key);
+            key = (char) (key + encChars[j] & 0x3E);
         }
         return new String(tmpChars);
     }

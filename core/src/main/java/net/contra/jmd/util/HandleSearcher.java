@@ -16,12 +16,6 @@ public class HandleSearcher {
     ConstantPoolGen cpg;
     public int index;
 
-    public HandleSearcher(InstructionHandle[] handles, ConstantPoolGen cpg) {
-        this.handles = handles;
-        index = 0;
-        this.cpg = cpg;
-    }
-
     public void setPosition(int index) {
         this.index = index;
     }

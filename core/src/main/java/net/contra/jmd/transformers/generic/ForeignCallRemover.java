@@ -19,12 +19,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 30, 2010
- * Time: 4:52:48 AM
- */
 public class ForeignCallRemover {
     private static LogHandler logger = new LogHandler("ForeignCallRemover");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
@@ -160,22 +154,6 @@ public class ForeignCallRemover {
             }
             if (replaced > 0) {
                 logger.debug("Removed " + replaced + " foreign calls in " + cg.getClassName());
-            }
-        }
-    }
-
-    public void removeExceptions() {
-        for (ClassGen cg : cgs.values()) {
-            int replaced = 0;
-            for (Method method : cg.getMethods()) {
-                //logger.debug("in method " + method.getName());
-                MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
-
-                mg.removeExceptionHandlers();
-                mg.removeExceptions();
-                mg.setMaxLocals();
-                mg.setMaxStack();
-                cg.replaceMethod(method, mg.getMethod());
             }
         }
     }

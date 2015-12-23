@@ -55,14 +55,11 @@ public class JShrinkTransformer implements Transformer {
     public boolean isLoader(ClassGen cg) {
 
 
-        if (cg.getMethods().length == 3 && cg.getMethods()[1].isStatic()
+        return cg.getMethods().length == 3 && cg.getMethods()[1].isStatic()
                 && cg.getMethods()[1].isFinal()
                 && cg.getMethods()[1].isPublic()
                 && cg.getMethods()[1].isSynchronized()
-                && cg.getMethods()[1].getReturnType().toString().equals("java.lang.String")) {
-            return true;
-        }
-        return false;
+                && cg.getMethods()[1].getReturnType().toString().equals("java.lang.String");
     }
 
     public void replaceStrings() throws TargetLostException {

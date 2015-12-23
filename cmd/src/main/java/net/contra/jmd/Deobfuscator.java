@@ -18,7 +18,6 @@ import java.util.Scanner;
  * Time: 9:21:10 PM
  */
 public class Deobfuscator {
-    public static boolean debug = false;
     private static String version = VersionUtil.getVersion();
     private static String credits = "skoalman, super_, ollie, popcorn89, the prophecy, and saevion";
     private static LogHandler logger = new LogHandler("Deobfuscator");
@@ -38,7 +37,6 @@ public class Deobfuscator {
             return;
         }
         if (argv[2].equals("true")) {
-            debug = true;
         }
         if (argv[1].toLowerCase().equals("zkm")) {
             ZKMTransformer zt = new ZKMTransformer(argv[0]);

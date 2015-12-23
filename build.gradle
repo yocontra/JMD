@@ -70,6 +70,7 @@ subprojects {
 
 project(':core') {
     dependencies {
+        compile 'com.google.dagger:dagger:2.0.2'
         compile 'org.apache.bcel:bcel:5.2'
         compile 'commons-io:commons-io:2.4'
     }

@@ -25,12 +25,6 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 30, 2010
- * Time: 4:52:48 AM
- */
 public class GenericStringDeobfuscator {
     private static LogHandler logger = new LogHandler("GenericStringDeobfuscator");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
@@ -93,7 +87,7 @@ public class GenericStringDeobfuscator {
                             }
                             java.lang.reflect.Method mthd;
                             try {
-                                mthd = cl.getMethod(methodCallMethod, new Class<?>[]{String.class});
+                                mthd = cl.getMethod(methodCallMethod, String.class);
                                 mthd.setAccessible(true);
                             } catch (NoSuchMethodException e) {
                                 continue;

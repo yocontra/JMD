@@ -25,9 +25,6 @@ public class DashOTransformer implements Transformer {
     String JAR_NAME;
     String decryptor = "NOTFOUND";
     String decryptorclass = "NOTFOUND";
-    private List<Field> flowObstructors = new LinkedList<Field>();
-    private Field controlField = null;
-    private String controlClass = "";
 
     public DashOTransformer(String jarfile) throws Exception {
         File jar = new File(jarfile);
@@ -39,154 +36,13 @@ public class DashOTransformer implements Transformer {
             if (entry == null) {
                 break;
             }
-            if (entry.isDirectory()) {
-            }
+
             if (entry.getName().endsWith(".class")) {
                 ClassGen cg = new ClassGen(new ClassParser(jf.getInputStream(entry), entry.getName()).parse());
                 cgs.put(cg.getClassName(), cg);
             } else {
                 NonClassEntries.add(entry, jf.getInputStream(entry));
             }
-        }
-    }
-
-    public void removeControlFlow() {
-        for (ClassGen cg : cgs.values()) {
-            int replaced = 0;
-            for (Method m : cg.getMethods()) {
-                MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
-                InstructionList il = mg.getInstructionList();
-                InstructionHandle[] handles = il.getInstructionHandles();
-                for (int i = 0; i < handles.length; i++) {
-                    if (handles[i].getInstruction() instanceof GOTO) {
-                        GOTO origGOTO = (GOTO) handles[i].getInstruction();
-                        InstructionHandle origTarget = origGOTO.getTarget();
-                        if (origTarget.getInstruction() instanceof GOTO) {
-                            handles[i].setInstruction(origTarget.getInstruction());
-                            replaced++;
-                        }
-                    }
-                }
-                mg.setInstructionList(il);
-                mg.setMaxLocals();
-                mg.setMaxStack();
-                cg.replaceMethod(m, mg.getMethod());
-            }
-            if (replaced > 0) {
-                logger.debug("Replaced " + replaced + " GOTO-GOTOs");
-            }
-        }
-    }
-
-    public void unconditionalBranchTransformer() {
-        for (ClassGen cg : cgs.values()) {
-            for (Method method : cg.getMethods()) {
-                final MethodGen mg = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
-                if (method.isAbstract() || method.isNative()) {
-                    return;
-                }
-                final InstructionList list = mg.getInstructionList();
-                InstructionFinder finder = new InstructionFinder(list);
-                final ConstantPoolGen cpg = cg.getConstantPool();
-                int branchesSimplified = 0;
-                Iterator<InstructionHandle[]> matches = finder.search("IfInstruction");
-                while (matches.hasNext()) {
-                    InstructionHandle ifHandle = matches.next()[0];
-                    InstructionHandle target = ((BranchHandle) ifHandle).getTarget();
-                    if (target.getInstruction() instanceof GOTO) {
-                        branchesSimplified++;
-                        ((BranchHandle) ifHandle).setTarget(((BranchHandle) target).getTarget());
-                    }
-                }
-                matches = finder.search("GOTO GOTO");
-                while (matches.hasNext()) {
-                    InstructionHandle[] match = matches.next();
-                    try {
-                        list.delete(match[0]);
-                    } catch (TargetLostException tlex) {
-                        for (InstructionHandle target : tlex.getTargets()) {
-                            for (InstructionTargeter targeter : target.getTargeters()) {
-                                targeter.updateTarget(target, match[1]);
-                            }
-                        }
-                    }
-                }
-                mg.setInstructionList(list);
-                mg.setMaxLocals();
-                mg.setMaxStack();
-                if (branchesSimplified > 0) {
-                    logger.debug("simplified " + branchesSimplified + " unconditional branches");
-                    cg.replaceMethod(method, mg.getMethod());
-                }
-            }
-        }
-    }
-
-    public void exitFlowTransformer() {
-        for (ClassGen cg : cgs.values()) {
-            int correct = 0;
-            for (Method method : cg.getMethods()) {
-                final MethodGen mgen = new MethodGen(method, cg.getClassName(), cg.getConstantPool());
-                if (!method.isAbstract() && !method.isNative()) {
-                    InstructionList list = mgen.getInstructionList();
-                    InstructionFinder finder = new InstructionFinder(list);
-                    CodeExceptionGen[] exceptionGens = mgen.getExceptionHandlers();
-                    for (Iterator<InstructionHandle[]> matches = finder.search(
-                            "ASTORE ALOAD (NEW DUP (PushInstruction InvokeInstruction)+ (ALOAD IfInstruction LDC GOTO LDC " +
-                                    "INVOKEVIRTUAL)? (PushInstruction InvokeInstruction)* InvokeInstruction+)?");
-                         matches.hasNext();) {
-                        /* thanks to popcorn89 */
-                        InstructionHandle[] match = matches.next();
-                        if (!(match[match.length - 1].getInstruction() instanceof ATHROW)) {
-                            continue;
-                        }
-                        InstructionHandle astoreInstr = match[0];
-                        InstructionHandle athrowInstr = match[match.length - 1];
-                        InstructionHandle toRedirect = athrowInstr.getNext();
-                        for (CodeExceptionGen exgen : exceptionGens) {
-                            if (exgen.getHandlerPC().equals(astoreInstr)) {
-                                mgen.removeExceptionHandler(exgen);
-                            }
-                        }
-                        try {
-                            list.delete(astoreInstr, athrowInstr);
-                        } catch (TargetLostException tlex) {
-                            if (athrowInstr == list.getEnd()) {
-                                toRedirect = astoreInstr.getPrev();
-                            }
-                            for (InstructionHandle target : tlex.getTargets()) {
-                                for (InstructionTargeter targeter : target.getTargeters()) {
-                                    targeter.updateTarget(target, toRedirect);
-                                }
-                            }
-                        }
-                    }
-                    list.setPositions(true);
-                    InstructionHandle lastInstr = list.getEnd();
-                    InstructionHandle secondToLastInstr = lastInstr.getPrev();
-                    if (secondToLastInstr != null && (lastInstr.getInstruction() instanceof RETURN)
-                            && (secondToLastInstr.getInstruction() instanceof RETURN)) {
-                        try {
-                            list.delete(secondToLastInstr);
-                        } catch (TargetLostException tlex) {
-                            for (InstructionHandle target : tlex.getTargets()) {
-                                for (InstructionTargeter targeter : target.getTargeters()) {
-                                    targeter.updateTarget(target, lastInstr);
-                                }
-                            }
-                        }
-                    }
-                    if (mgen.getMethod() != method) {
-                        correct++;
-                        //logger.debug("corrected exit flow in " + cg.getClassName() + "." + mgen.getName() + mgen.getSignature());
-                        mgen.setInstructionList(list);
-                        mgen.setMaxLocals();
-                        mgen.setMaxStack();
-                        cg.replaceMethod(method, mgen.getMethod());
-                    }
-                }
-            }
-            logger.debug("Corrected exit flow " + correct + " times in " + cg.getClassName());
         }
     }
 

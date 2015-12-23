@@ -652,11 +652,7 @@ public class ZKMTransformer implements Transformer {
                                     GETSTATIC gstat = (GETSTATIC) ih.getInstruction();
                                     ClassGen cp = cgs.get(gstat.getClassName(cpg));
                                     Field fz = cp.containsField(gstat.getFieldName(cpg));
-                                    if (cp != null && fz != null && controlField != null) {
-                                        return controlField.equals(fz);
-                                    } else {
-                                        return false;
-                                    }
+                                    return cp != null && fz != null && controlField != null && controlField.equals(fz);
                                 }
                             }
                         });

@@ -14,11 +14,10 @@ import java.util.jar.JarOutputStream;
 public class GenericMethods {
     //TODO: Get LDC_W into isInt and getValueOfInt
     public static boolean isNumber(Instruction ins) {
-        if (ins instanceof BIPUSH || ins instanceof SIPUSH || ins instanceof ICONST || ins instanceof LDC_W) {
-            return true;
-        } else {
-            return false;
-        }
+        return ins instanceof BIPUSH
+                || ins instanceof SIPUSH
+                || ins instanceof ICONST
+                || ins instanceof LDC_W;
     }
 
     public static int getValueOfNumber(Instruction ins, ConstantPoolGen cpg) {
@@ -180,16 +179,9 @@ public class GenericMethods {
     }
 
     public static boolean isCall(Instruction ins) {
-        if (ins instanceof INVOKESTATIC) {
-            return true;
-        } else if (ins instanceof INVOKEVIRTUAL) {
-            return true;
-        } else if (ins instanceof INVOKEINTERFACE) {
-            return true;
-        } else if (ins instanceof INVOKESPECIAL) {
-            return true;
-        } else {
-            return false;
-        }
+        return ins instanceof INVOKESTATIC
+                || ins instanceof INVOKEVIRTUAL
+                || ins instanceof INVOKEINTERFACE
+                || ins instanceof INVOKESPECIAL;
     }
 }

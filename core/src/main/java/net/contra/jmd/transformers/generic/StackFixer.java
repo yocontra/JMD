@@ -36,8 +36,7 @@ public class StackFixer {
             if (entry == null) {
                 break;
             }
-            if (entry.isDirectory()) {
-            }
+
             if (entry.getName().endsWith(".class")) {
                 ClassGen cg = new ClassGen(new ClassParser(jf.getInputStream(entry), entry.getName()).parse());
                 cgs.put(cg.getClassName(), cg);

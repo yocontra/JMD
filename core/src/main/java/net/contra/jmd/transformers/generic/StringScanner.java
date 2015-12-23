@@ -13,18 +13,11 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 30, 2010
- * Time: 9:25:02 PM
- */
 public class StringScanner {
     private static LogHandler logger = new LogHandler("StringScanner");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
     boolean replaceMode = false;
     String substitute = "";
-    String JAR_NAME;
     String inputScan = "";
 
     public StringScanner(String jarfile, String scanstring, boolean replace, String replacestring) throws Exception {
@@ -32,7 +25,6 @@ public class StringScanner {
         replaceMode = replace;
         substitute = replacestring;
         File jar = new File(jarfile);
-        JAR_NAME = jarfile;
         JarFile jf = new JarFile(jar);
         Enumeration<JarEntry> entries = jf.entries();
         while (entries.hasMoreElements()) {
@@ -40,8 +32,7 @@ public class StringScanner {
             if (entry == null) {
                 break;
             }
-            if (entry.isDirectory()) {
-            }
+
             if (entry.getName().endsWith(".class")) {
                 ClassGen cg = new ClassGen(new ClassParser(jf.getInputStream(entry), entry.getName()).parse());
                 cgs.put(cg.getClassName(), cg);
@@ -62,9 +53,9 @@ public class StringScanner {
                 } else {
                     break;
                 }
-                for (int x = 0; x < handles.length; x++) {
-                    if (handles[x].getInstruction() instanceof LDC) {
-                        LDC newldc = (LDC) handles[x].getInstruction();
+                for (InstructionHandle handle : handles) {
+                    if (handle.getInstruction() instanceof LDC) {
+                        LDC newldc = (LDC) handle.getInstruction();
                         String val = newldc.getValue(cg.getConstantPool()).toString();
                         if (val.contains(inputScan)) {
                             if (!replaceMode) {
@@ -72,7 +63,7 @@ public class StringScanner {
                             } else {
                                 String newz = val.replace(inputScan, substitute);
                                 int stringRef = cg.getConstantPool().addString(newz);
-                                handles[x].setInstruction(new LDC(stringRef));
+                                handle.setInstruction(new LDC(stringRef));
                                 logger.log(val + "->" + newz + " in " + cg.getClassName() + "." + m.getName());
                             }
                         }
@@ -98,6 +89,5 @@ public class StringScanner {
         }
         searchConstantPool();
         logger.log("Operation Completed.");
-
     }
 }

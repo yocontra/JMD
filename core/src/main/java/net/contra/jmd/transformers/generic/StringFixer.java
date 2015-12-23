@@ -19,12 +19,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 30, 2010
- * Time: 4:52:48 AM
- */
 public class StringFixer {
     private static LogHandler logger = new LogHandler("StringFixer");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
@@ -41,8 +35,7 @@ public class StringFixer {
             if (entry == null) {
                 break;
             }
-            if (entry.isDirectory()) {
-            }
+
             if (entry.getName().endsWith(".class")) {
                 ClassGen cg = new ClassGen(new ClassParser(jf.getInputStream(entry), entry.getName()).parse());
                 cgs.put(cg.getClassName(), cg);

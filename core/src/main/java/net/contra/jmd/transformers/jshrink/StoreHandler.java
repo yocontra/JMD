@@ -15,7 +15,7 @@ public class StoreHandler {
     static String[] append = new String[256];
     static int[] close = new int[256];
 
-    public static final synchronized String I(int paramInt) {
+    public static synchronized String I(int paramInt) {
         int i = paramInt & 0xFF;
         if (close[i] != paramInt) {
             close[i] = paramInt;
@@ -46,8 +46,7 @@ public class StoreHandler {
                     m += j;
                     while (j < m) {
                         int int2 = j;
-                        byte[] byteArray = arrayOfByte;
-                        byteArray[int2] = (byte) (byteArray[int2] ^ k);
+                        arrayOfByte[int2] = (byte) (arrayOfByte[int2] ^ k);
                         j++;
                     }
                 }

@@ -14,12 +14,6 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Eric
- * Date: Nov 30, 2010
- * Time: 4:52:48 AM
- */
 public class Renamer {
     private static LogHandler logger = new LogHandler("Renamer");
     private Map<String, ClassGen> cgs = new HashMap<String, ClassGen>();
@@ -78,11 +72,11 @@ public class Renamer {
                     continue;
                 }
                 InstructionHandle[] handles = list.getInstructionHandles();
-                for (int x = 0; x < handles.length; x++) {
-                    if (GenericMethods.isCall(handles[x].getInstruction())) {
-                        String oldClassName = GenericMethods.getCallClassName(handles[x].getInstruction(), cg.getConstantPool());
-                        String oldMethodName = GenericMethods.getCallMethodName(handles[x].getInstruction(), cg.getConstantPool());
-                        String oldSignature = GenericMethods.getCallSignature(handles[x].getInstruction(), cg.getConstantPool());
+                for (InstructionHandle handle : handles) {
+                    if (GenericMethods.isCall(handle.getInstruction())) {
+                        String oldClassName = GenericMethods.getCallClassName(handle.getInstruction(), cg.getConstantPool());
+                        String oldMethodName = GenericMethods.getCallMethodName(handle.getInstruction(), cg.getConstantPool());
+                        String oldSignature = GenericMethods.getCallSignature(handle.getInstruction(), cg.getConstantPool());
                         String mod = oldClassName + "-" + oldMethodName + "-" + oldSignature;
                         if (methodNames.containsKey(mod)) {
                             //logger.debug("Accessing " + methodNames.get(mod));
@@ -91,8 +85,8 @@ public class Renamer {
                             String newMethodName = args[1];
                             String newSignature = args[2];
                             int newindex = cg.getConstantPool().addMethodref(newClassName, newMethodName, newSignature);
-                            Instruction newInvoke = GenericMethods.getNewInvoke(handles[x].getInstruction(), newindex);
-                            handles[x].setInstruction(newInvoke);
+                            Instruction newInvoke = GenericMethods.getNewInvoke(handle.getInstruction(), newindex);
+                            handle.setInstruction(newInvoke);
                             replaced++;
                         }
                     }

@@ -3,12 +3,6 @@
 ## Travis CI
 [![Build Status](https://travis-ci.org/contra/JMD.svg?branch=master)](https://travis-ci.org/contra/JMD)
 
-## Project Status
-
-JMD has been discontinued due to lack of time and was last updated November 24, 2010.
-I will continue to monitor this repository so feel free to submit pull requests/issues at any time and I'll try to help you out.
-Obfuscators update often (at least the good ones do) with new algorithms and techniques so it is more than possible some of the transformers will crash or break code.
-
 ## Usage
 
         java -jar JMD.jar <jarfile location> <transformer name> <debug true/false> <transformer specific args>
@@ -41,12 +35,6 @@ Latest release (most likely stable): Get the files from the repo
 JMD - Java 6 (hasn't been tested on anything else but should work)
 
 JMDGUI - .NET 4 or higher
-
-## Tutorials
-
-Identifying Java obfuscators: http://invokestatic.org/?p=62
-
-Using JMD: http://invokestatic.org/?p=88
         
 ## License
 

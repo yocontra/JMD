@@ -9,6 +9,11 @@
 
 JMDGUI.exe provides an optional frontend to the command line interface.
 
+## Road map
+   * Actualization transformers
+   * Migrate from BCEL to ASM
+   * Add tests
+
 ## Examples
 
     Remove ZKM obfuscation: java -jar JMD.jar "C:/Files/Magic.jar" zkm true

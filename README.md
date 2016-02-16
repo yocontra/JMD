@@ -1,7 +1,6 @@
 **JMD is a general purpose Java bytecode deobfuscation tool**
 
-## Travis CI
-[![Build Status](https://travis-ci.org/contra/JMD.svg?branch=master)](https://travis-ci.org/contra/JMD)
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
 ## Usage
 
@@ -64,3 +63,8 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+[travis-image]: https://travis-ci.org/contra/JMD.svg?branch=master
+[travis-url]: https://travis-ci.org/contra/JMD
+
+[coveralls-image]: https://coveralls.io/repos/contra/JMD/badge.svg?branch=master&service=github
+[coveralls-url]: https://coveralls.io/github/contra/JMD?branch=master

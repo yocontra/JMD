@@ -66,5 +66,5 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [travis-image]: https://travis-ci.org/contra/JMD.svg?branch=master
 [travis-url]: https://travis-ci.org/contra/JMD
 
-[coveralls-image]: https://coveralls.io/repos/contra/JMD/badge.svg?branch=master&service=github
+[coveralls-image]: https://coveralls.io/repos/github/contra/JMD/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/contra/JMD?branch=master

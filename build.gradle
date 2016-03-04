@@ -1,12 +1,23 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+    }
+}
+
 description = 'JMD is a general purpose Java bytecode deobfuscation tool'
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'findbugs'
     apply plugin: 'pmd'
+    apply plugin: 'jacoco'
+    apply plugin: 'com.github.kt3k.coveralls'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     version = '1.6'
 
@@ -64,6 +75,17 @@ subprojects {
         reports {
             xml.enabled = false
             html.enabled = true
+        }
+    }
+
+    tasks.coveralls {
+        dependsOn 'check'
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled = true
+            html.enabled = false
         }
     }
 }

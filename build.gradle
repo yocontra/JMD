@@ -1,9 +1,25 @@
 buildscript {
+    ext {
+        projectVersion = '1.6'
+
+        gradleWrapperVersion = '2.14.1'
+
+        coverallsGradlePluginVersion = '2.6.3'
+
+        daggerVersion = '2.6'
+        bcelVersion = '6.0'
+        commonsIoVersion = '2.5'
+        slf4jVersion = '1.7.21'
+        logbackVersion = '1.1.7'
+        testngVersion = '6.9.10'
+    }
+
     repositories {
         mavenCentral()
     }
+
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:' + coverallsGradlePluginVersion
     }
 }
 
@@ -19,10 +35,14 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 
-    version = '1.6'
+    version = projectVersion
 
     repositories {
         mavenCentral()
+    }
+
+    task wrapper(type: Wrapper) {
+        gradleVersion = gradleWrapperVersion
     }
 
     test.onlyIf {
@@ -112,11 +132,13 @@ project(':cmd') {
 
 project(':core') {
     dependencies {
-        compile 'com.google.dagger:dagger:2.0.2'
-        compile 'org.apache.bcel:bcel:5.2'
-        compile 'commons-io:commons-io:2.4'
+        compile group: 'com.google.dagger', name: 'dagger', version: daggerVersion
+        compile group: 'org.apache.bcel', name: 'bcel', version: bcelVersion
+        compile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
+        compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
 
-        testCompile 'org.testng:testng:6.9.10'
+        testCompile group: 'org.testng', name: 'testng', version: testngVersion
     }
 }
 

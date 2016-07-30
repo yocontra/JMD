@@ -1,6 +1,7 @@
 package net.contra.jmd;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -14,14 +15,18 @@ public final class Version {
     }
 
     public static String getVersion() {
-
-        URL url = Version.class.getResource(JarFile.MANIFEST_NAME);
+        final URL url = Version.class.getResource(JarFile.MANIFEST_NAME);
+        if (url == null) {
+            return UNKNOWN;
+        }
 
         try {
-            Manifest manifest = new Manifest(url.openStream());
+            final InputStream inputStream = url.openStream();
+            final Manifest manifest = new Manifest(inputStream);
+
             return manifest.getMainAttributes().getValue(Attributes.Name.IMPLEMENTATION_VERSION);
         } catch (IOException e) {
-           // empty
+            // empty
         }
 
         return UNKNOWN;

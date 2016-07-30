@@ -390,7 +390,7 @@ public class ZKMTransformer implements Transformer {
                 if (matches.hasNext()) {
                     InstructionHandle[] match = matches.next();
                     GETSTATIC gstatCtrlField = (GETSTATIC) match[0].getInstruction();
-                    controlClass = gstatCtrlField.getClassName(cg.getConstantPool());
+                    controlClass = gstatCtrlField.getName(cg.getConstantPool());
                     String fieldName = gstatCtrlField.getFieldName(cg.getConstantPool());
                     ClassGen ctrlClazz = cgs.get(controlClass);
                     controlField = ctrlClazz.containsField(fieldName);
@@ -422,7 +422,7 @@ public class ZKMTransformer implements Transformer {
                                 } else {
                                     ctrlFieldInstr = (FieldInstruction) code[code.length - 2].getInstruction();
                                 }
-                                String className = ctrlFieldInstr.getClassName(cpg);
+                                String className = ctrlFieldInstr.getName(cpg);
                                 String fieldName = ctrlFieldInstr.getFieldName(cpg);
                                 return className.equals(controlClass) && fieldName.equals(controlField.getName());
                             }
@@ -434,7 +434,7 @@ public class ZKMTransformer implements Transformer {
                     Field flowObstructor = null;
                     if (first instanceof GETSTATIC) {
                         PUTSTATIC pstatCtrlField = (PUTSTATIC) match[match.length - 2].getInstruction();
-                        String className = pstatCtrlField.getClassName(cg.getConstantPool());
+                        String className = pstatCtrlField.getName(cg.getConstantPool());
                         String fieldName = pstatCtrlField.getFieldName(cg.getConstantPool());
                         ctrlClazz = cgs.get(className);
                         flowObstructor = ctrlClazz.containsField(fieldName);
@@ -446,7 +446,7 @@ public class ZKMTransformer implements Transformer {
                         assert idx == iStore.getIndex() && idx == mGen.getMaxLocals() - 1 : "expected " + idx
                                 + " found " + iStore.getIndex();
                         GETSTATIC gstatCtrlField = (GETSTATIC) iStoreHandle.getPrev().getInstruction();
-                        String className = gstatCtrlField.getClassName(cg.getConstantPool());
+                        String className = gstatCtrlField.getName(cg.getConstantPool());
                         String fieldName = gstatCtrlField.getFieldName(cg.getConstantPool());
                         ctrlClazz = cgs.get(className);
                         flowObstructor = ctrlClazz.containsField(fieldName);
@@ -625,35 +625,32 @@ public class ZKMTransformer implements Transformer {
 
                 Iterator<InstructionHandle[]> matches = finder.search(
                         "(ILOAD|GETSTATIC) ((ISTORE)|(IFNE|IFEQ)) (((IINC ILOAD)|((ILOAD IFEQ)? ICONST GOTO ICONST)) PUTSTATIC)?",
-                        new InstructionFinder.CodeConstraint() {
-
-                            public boolean checkCode(InstructionHandle[] code) {
-                                InstructionHandle ih = code[0];
-                                if (code.length <= 3) {
-                                    if (ih.getInstruction() instanceof GETSTATIC) {
-                                        GETSTATIC gstat = (GETSTATIC) ih.getInstruction();
-                                        return flowObstructors.contains(cgs.get(gstat.getClassName(cpg))
-                                                .containsField(gstat.getFieldName(cpg)));
-                                    } else {
-                                        ILOAD iLoad = (ILOAD) ih.getInstruction();
-                                        int idx = iLoad.getIndex();
-                                        if (idx < mg.getArgumentTypes().length + (mg.isStatic() ? 0 : 1)) {
-                                            return false;
-                                        }
-                                        InstructionHandle storeHandle = findIStore(list.getStart(), idx);
-                                        if (storeHandle == null || !(storeHandle.getPrev().getInstruction() instanceof GETSTATIC)) {
-                                            return false;
-                                        }
-                                        GETSTATIC gstat = (GETSTATIC) storeHandle.getPrev().getInstruction();
-                                        return flowObstructors.contains(cgs.get(gstat.getClassName(cpg))
-                                                .containsField(gstat.getFieldName(cpg)));
-                                    }
-                                } else {
+                        code -> {
+                            InstructionHandle ih = code[0];
+                            if (code.length <= 3) {
+                                if (ih.getInstruction() instanceof GETSTATIC) {
                                     GETSTATIC gstat = (GETSTATIC) ih.getInstruction();
-                                    ClassGen cp = cgs.get(gstat.getClassName(cpg));
-                                    Field fz = cp.containsField(gstat.getFieldName(cpg));
-                                    return cp != null && fz != null && controlField != null && controlField.equals(fz);
+                                    return flowObstructors.contains(cgs.get(gstat.getName(cpg))
+                                            .containsField(gstat.getFieldName(cpg)));
+                                } else {
+                                    ILOAD iLoad = (ILOAD) ih.getInstruction();
+                                    int idx = iLoad.getIndex();
+                                    if (idx < mg.getArgumentTypes().length + (mg.isStatic() ? 0 : 1)) {
+                                        return false;
+                                    }
+                                    InstructionHandle storeHandle = findIStore(list.getStart(), idx);
+                                    if (storeHandle == null || !(storeHandle.getPrev().getInstruction() instanceof GETSTATIC)) {
+                                        return false;
+                                    }
+                                    GETSTATIC gstat = (GETSTATIC) storeHandle.getPrev().getInstruction();
+                                    return flowObstructors.contains(cgs.get(gstat.getName(cpg))
+                                            .containsField(gstat.getFieldName(cpg)));
                                 }
+                            } else {
+                                GETSTATIC gstat = (GETSTATIC) ih.getInstruction();
+                                ClassGen cp = cgs.get(gstat.getName(cpg));
+                                Field fz = cp.containsField(gstat.getFieldName(cpg));
+                                return cp != null && fz != null && controlField != null && controlField.equals(fz);
                             }
                         });
 

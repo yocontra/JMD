@@ -165,33 +165,7 @@ public class ZKMTransformer implements Transformer {
         if (typeA(cg)) {
             System.out.println("Type A Found!");
             for (Method m : cg.getMethods()) {
-                MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
-                InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
-                char[] keyAsChars = new char[5];
-                for (InstructionHandle handle : handles) {
-                    if (handle.getInstruction() instanceof TABLESWITCH) {
-                        TABLESWITCH xor = (TABLESWITCH) handle.getInstruction();
-                        for (int a = 0; a < xor.getTargets().length; a++) {
-                            Instruction target = xor.getTargets()[a].getInstruction();
-                            if (target instanceof BIPUSH) {
-                                keyAsChars[a] = (char) ((BIPUSH) target).getValue().intValue();
-                            } else {
-                                keyAsChars[a] = (char) ((ICONST) target).getValue().intValue();
-                            }
-                        }
-                        Instruction target = xor.getTarget().getInstruction();
-                        if (target instanceof BIPUSH) {
-                            keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
-                        } else {
-                            keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
-                        }
-                    }
-                }
-                return keyAsChars;
-            }
-        } else {
-            for (Method m : cg.getMethods()) {
-                if (m.getName().contains("clinit")) {
+                if (m.getArgumentTypes().length == 1 && m.getArgumentTypes()[0].equals(Type.getType(char[].class))) {
                     MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
                     InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
                     char[] keyAsChars = new char[5];
@@ -200,30 +174,65 @@ public class ZKMTransformer implements Transformer {
                             TABLESWITCH xor = (TABLESWITCH) handle.getInstruction();
                             for (int a = 0; a < xor.getTargets().length; a++) {
                                 Instruction target = xor.getTargets()[a].getInstruction();
-                                if (GenericMethods.isNumber(target)) {
-                                    keyAsChars[a] = (char) GenericMethods.getValueOfNumber(target, cg.getConstantPool());
+                                if (target instanceof BIPUSH) {
+                                    keyAsChars[a] = (char) ((BIPUSH) target).getValue().intValue();
                                 } else {
-                                    logger.error("ZKM Key Method A Failed, trying method B!");
-                                    return findKeyB(cg);
+                                    keyAsChars[a] = (char) ((ICONST) target).getValue().intValue();
                                 }
                             }
                             Instruction target = xor.getTarget().getInstruction();
                             if (target instanceof BIPUSH) {
                                 keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
-                            } else if (target instanceof ICONST) {
-                                keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
                             } else {
-                                logger.error("ZKM Key Method A Failed, trying method B!");
-                                return findKeyB(cg);
+                                keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
                             }
                         }
                     }
                     return keyAsChars;
                 }
             }
+        } else {
+            for (Method m : cg.getMethods()) {
+                if (m.getName().contains("clinit")) {
+                    MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
+                    InstructionHandle[] handles = mg.getInstructionList().getInstructionHandles();
+                    char[] keyAsChars;
+                    for (InstructionHandle handle : handles) {
+                        if (handle.getInstruction() instanceof TABLESWITCH) {
+                            TABLESWITCH xor = (TABLESWITCH) handle.getInstruction();
+                            keyAsChars = getKeyFromSwitch(xor, cg);
+                            if (keyAsChars != null) {
+                                return keyAsChars;
+                            }
+                        }
+                    }
+                    return findKeyB(cg);
+                }
+            }
         }
 
         return null;
+    }
+
+    private static char[] getKeyFromSwitch(TABLESWITCH xor, ClassGen cg) {
+        char[] keyAsChars = new char[5];
+        for (int a = 0; a < xor.getTargets().length; a++) {
+            Instruction target = xor.getTargets()[a].getInstruction();
+            if (GenericMethods.isNumber(target)) {
+                keyAsChars[a] = (char) GenericMethods.getValueOfNumber(target, cg.getConstantPool());
+            } else {
+                return null;
+            }
+        }
+        Instruction target = xor.getTarget().getInstruction();
+        if (target instanceof BIPUSH) {
+            keyAsChars[4] = (char) ((BIPUSH) target).getValue().intValue();
+        } else if (target instanceof ICONST) {
+            keyAsChars[4] = (char) ((ICONST) target).getValue().intValue();
+        } else {
+            return null;
+        }
+        return keyAsChars;
     }
 
     public static String decrypt(String encrypted, char[] key) {
@@ -359,9 +368,8 @@ public class ZKMTransformer implements Transformer {
                 ArrayList<String> all = new ArrayList<String>();
                 if (method.getName().contains("clinit")) {
                     for (int i = 0; i < handles.length; i++) {
-                        if (GenericMethods.isNumber(handles[i].getInstruction())
-                                && handles[i + 1].getInstruction() instanceof LDC) {
-                            LDC orig = ((LDC) handles[i + 1].getInstruction());
+                        if (handles[i].getInstruction() instanceof LDC) {
+                            LDC orig = ((LDC) handles[i].getInstruction());
                             if (!orig.getType(cg.getConstantPool()).getSignature().contains("String")) continue;
                             String enc = orig.getValue(cg.getConstantPool()).toString();
                             String dec = decrypt(enc, key);
@@ -575,9 +583,11 @@ public class ZKMTransformer implements Transformer {
                             if (athrowInstr == list.getEnd()) {
                                 toRedirect = astoreInstr.getPrev();
                             }
-                            for (InstructionHandle target : tlex.getTargets()) {
-                                for (InstructionTargeter targeter : target.getTargeters()) {
-                                    targeter.updateTarget(target, toRedirect);
+                            if (toRedirect != null) {
+                                for (InstructionHandle target : tlex.getTargets()) {
+                                    for (InstructionTargeter targeter : target.getTargeters()) {
+                                        targeter.updateTarget(target, toRedirect);
+                                    }
                                 }
                             }
                         }

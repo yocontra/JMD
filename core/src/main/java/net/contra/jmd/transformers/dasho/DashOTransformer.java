@@ -47,17 +47,29 @@ public class DashOTransformer implements Transformer {
     }
 
     public static String decrypt(String input) {
+        if (isEmpty(input)) {
+            return input;
+        }
+
         char[] inputChars = input.toCharArray();
-        int length = inputChars.length - 1;
+
+        int length = inputChars.length;
         char[] inputCharsCopy = new char[length];
-        int lastChar = inputChars[length];
         int j = 0;
+        int i = 0;
+
         while (j < length) {
-            inputCharsCopy[j] = (char) (inputChars[j] ^ lastChar & 127);
-            lastChar++;
+            inputCharsCopy[j] = ((char) (inputChars[j] - '\1' ^ i));
+
+            i = (char) (i + 1);
             j++;
         }
+
         return new String(inputCharsCopy);
+    }
+
+    private static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.length() == 0;
     }
 
     public void setDecryptor() {

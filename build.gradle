@@ -11,7 +11,7 @@ buildscript {
         commonsIoVersion = '2.5'
         slf4jVersion = '1.7.21'
         logbackVersion = '1.1.7'
-        testngVersion = '6.9.10'
+        testngVersion = '6.9.13.6'
     }
 
     repositories {

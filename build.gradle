@@ -2,7 +2,7 @@ buildscript {
     ext {
         projectVersion = '1.6'
 
-        gradleWrapperVersion = '2.14.1'
+        gradleWrapperVersion = '3.1'
 
         coverallsGradlePluginVersion = '2.6.3'
 
@@ -110,9 +110,10 @@ subprojects {
     }
 }
 
-project(':cmd') {
+project(':jmd-cli') {
+
     dependencies {
-        compile project(':core')
+        compile project(':jmd-core')
     }
 
     jar {
@@ -130,7 +131,8 @@ project(':cmd') {
     }
 }
 
-project(':core') {
+project(':jmd-core') {
+
     dependencies {
         compile group: 'com.google.dagger', name: 'dagger', version: daggerVersion
         compile group: 'org.apache.bcel', name: 'bcel', version: bcelVersion
@@ -138,9 +140,9 @@ project(':core') {
         compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
         compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
 
-        testCompile group: 'org.testng', name: 'testng', version: testngVersion
+        compile group: 'org.testng', name: 'testng', version: testngVersion
     }
 }
 
-project(':gui') {
+project(':jmd-gui') {
 }

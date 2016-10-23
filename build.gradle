@@ -45,10 +45,6 @@ subprojects {
         gradleVersion = gradleWrapperVersion
     }
 
-    test.onlyIf {
-        !Boolean.getBoolean('skip.tests')
-    }
-
     findbugs {
         ignoreFailures = true
         effort = 'max'

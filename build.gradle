@@ -4,8 +4,6 @@ buildscript {
 
         gradleWrapperVersion = '3.1'
 
-        coverallsGradlePluginVersion = '2.6.3'
-
         daggerVersion = '2.6'
         bcelVersion = '6.0'
         commonsIoVersion = '2.5'
@@ -17,20 +15,20 @@ buildscript {
     repositories {
         mavenCentral()
     }
+}
 
-    dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:' + coverallsGradlePluginVersion
-    }
+plugins {
+    id "com.github.kt3k.coveralls" version '2.6.3'
 }
 
 description = 'JMD is a general purpose Java bytecode deobfuscation tool'
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'findbugs'
-    apply plugin: 'pmd'
-    apply plugin: 'jacoco'
-    apply plugin: 'com.github.kt3k.coveralls'
+    apply plugin:  "java"
+    apply plugin:  "findbugs"
+    apply plugin:  "pmd"
+    apply plugin:  "jacoco"
+    apply plugin:  "com.github.kt3k.coveralls"
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

@@ -5,19 +5,17 @@ import net.contra.jmd.util.GenericMethods;
 import net.contra.jmd.util.LogHandler;
 import net.contra.jmd.util.NonClassEntries;
 import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.*;
-import org.apache.bcel.util.InstructionFinder;
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.*;
+import java.io.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 
 public class DashOTransformer implements Transformer {
@@ -140,12 +138,6 @@ public class DashOTransformer implements Transformer {
 
         try {
             jos = new JarOutputStream(os);
-            for (ClassGen classIt : cgs.values()) {
-                jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
-                jos.write(classIt.getJavaClass().getBytes());
-                jos.closeEntry();
-                jos.flush();
-            }
             for (JarEntry jbe : NonClassEntries.entries) {
                 JarEntry destEntry = new JarEntry(jbe.getName());
                 byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
@@ -153,6 +145,14 @@ public class DashOTransformer implements Transformer {
                 jos.write(bite);
                 jos.closeEntry();
             }
+
+            for (ClassGen classIt : cgs.values()) {
+                jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', '/') + ".class"));
+                jos.write(classIt.getJavaClass().getBytes());
+                jos.closeEntry();
+                jos.flush();
+            }
+
             jos.closeEntry();
             jos.close();
         } catch (IOException ioe) {

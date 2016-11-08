@@ -71,7 +71,7 @@ public class ForeignCallRemover {
         try {
             jos = new JarOutputStream(os);
             for (ClassGen classIt : cgs.values()) {
-                jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
+                jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', '/') + ".class"));
                 jos.write(classIt.getJavaClass().getBytes());
                 jos.closeEntry();
                 jos.flush();

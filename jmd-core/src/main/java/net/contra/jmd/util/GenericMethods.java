@@ -123,17 +123,19 @@ public class GenericMethods {
 
         try {
             jos = new JarOutputStream(os);
-            for (ClassGen classIt : cgs) {
-                jos.putNextEntry(new JarEntry(classIt.getClassName().replace('.', File.separatorChar) + ".class"));
-                jos.write(classIt.getJavaClass().getBytes());
-                jos.closeEntry();
-                jos.flush();
-            }
+
             for (JarEntry jbe : NonClassEntries.entries) {
                 JarEntry destEntry = new JarEntry(jbe.getName());
                 byte[] bite = IOUtils.toByteArray(NonClassEntries.ins.get(jbe));
                 jos.putNextEntry(destEntry);
                 jos.write(bite);
+                jos.closeEntry();
+            }
+
+            for (ClassGen classIt : cgs) {
+                JarEntry classEntry = new JarEntry(classIt.getClassName().replace('.', '/') + ".class");
+                jos.putNextEntry(classEntry);
+                jos.write(classIt.getJavaClass().getBytes());
                 jos.closeEntry();
             }
             jos.closeEntry();

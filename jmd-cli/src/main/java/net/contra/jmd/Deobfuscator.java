@@ -24,7 +24,6 @@ public class Deobfuscator {
 
     public static void main(String[] argv) throws Exception {
         logger.message("Java Multi-Purpose Deobfuscator");
-        logger.message("Please Visit RECoders.org for updates and info");
         logger.message("Version " + version);
         logger.message("Created by Contra. Please read LICENSE.txt");
         logger.message("Tons of code from " + credits);

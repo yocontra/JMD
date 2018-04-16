@@ -33,6 +33,9 @@ public class SmokeScreenTransformer implements Transformer {
             for (Method m : cg.getMethods()) {
                 MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
                 InstructionList list = mg.getInstructionList();
+                if (list == null) {
+                    return;
+                }
                 InstructionHandle[] handles = list.getInstructionHandles();
                 for (int x = 0; x < handles.length; x++) {
                     if (x + 3 < handles.length) {
@@ -74,6 +77,9 @@ public class SmokeScreenTransformer implements Transformer {
                 int key = 0;
                 MethodGen mg = new MethodGen(m, cg.getClassName(), cg.getConstantPool());
                 InstructionList list = mg.getInstructionList();
+                if (list == null) {
+                    return;
+                }
                 InstructionHandle[] handles = list.getInstructionHandles();
                 for (int x = 0; x < handles.length; x++) {
                     if (x + 3 < handles.length) {

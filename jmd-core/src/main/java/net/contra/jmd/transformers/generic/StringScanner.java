@@ -40,6 +40,7 @@ public class StringScanner {
                 NonClassEntries.add(entry, jf.getInputStream(entry));
             }
         }
+        jf.close();
     }
 
     public void searchConstantPool() {

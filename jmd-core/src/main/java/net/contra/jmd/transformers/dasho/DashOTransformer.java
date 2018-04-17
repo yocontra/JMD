@@ -43,6 +43,7 @@ public class DashOTransformer implements Transformer {
                 NonClassEntries.add(entry, jf.getInputStream(entry));
             }
         }
+        jf.close();
     }
 
     public static String decrypt(String input) {

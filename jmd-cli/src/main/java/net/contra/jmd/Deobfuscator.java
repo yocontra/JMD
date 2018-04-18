@@ -80,7 +80,7 @@ public class Deobfuscator {
                     "\n ForeignCallRemover, GenericStringDeobfuscator, StackFixer, StringFixer, Renamer, and StringReplacer (not case sensitive)");
         }
         Scanner in = new Scanner(System.in);
-        logger.message("Press any key to exit...");
+        logger.message("Press <Enter> key to exit...");
         in.nextLine();
         in.close();
     }

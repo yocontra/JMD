@@ -82,5 +82,6 @@ public class Deobfuscator {
         Scanner in = new Scanner(System.in);
         logger.message("Press any key to exit...");
         in.nextLine();
+        in.close();
     }
 }

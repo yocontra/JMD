@@ -44,6 +44,7 @@ public class Renamer {
                 NonClassEntries.add(entry, jf.getInputStream(entry));
             }
         }
+        jf.close();
     }
 
     public void renameClasses() {

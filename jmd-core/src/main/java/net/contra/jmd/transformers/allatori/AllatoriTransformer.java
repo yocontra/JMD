@@ -46,6 +46,7 @@ public class AllatoriTransformer implements Transformer {
                 NonClassEntries.add(entry, jf.getInputStream(entry));
             }
         }
+        jf.close();
     }
 
     private boolean isStringClass(ClassGen cg) {

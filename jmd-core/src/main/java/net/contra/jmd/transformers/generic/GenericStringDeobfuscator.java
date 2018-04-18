@@ -47,6 +47,7 @@ public class GenericStringDeobfuscator {
                 NonClassEntries.add(entry, jf.getInputStream(entry));
             }
         }
+        jf.close();
     }
 
     public void replaceStrings() {

@@ -123,6 +123,7 @@ public class SmokeScreenTransformer implements Transformer {
             }
         }
         logger.debug("Classes loaded from JAR");
+        jf.close();
     }
 
     public static String decrypt(String encrypted, int myKey) {

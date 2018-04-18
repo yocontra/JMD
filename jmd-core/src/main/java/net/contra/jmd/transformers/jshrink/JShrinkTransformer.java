@@ -50,6 +50,7 @@ public class JShrinkTransformer implements Transformer {
         if (LoaderClass == null) {
             logger.error("Loader class not found! Class not using JShrink");
         }
+        jf.close();
     }
 
     public boolean isLoader(ClassGen cg) {

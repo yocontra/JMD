@@ -46,6 +46,7 @@ public class ForeignCallRemover {
                 NonClassEntries.add(entry, jf.getInputStream(entry));
             }
         }
+        jf.close();
     }
 
     public boolean isAuthClass(ClassGen cg) {

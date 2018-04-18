@@ -45,6 +45,7 @@ public class ZKMTransformer implements Transformer {
             }
         }
         logger.debug("Classes loaded from JAR");
+        jf.close();
     }
 
     public static boolean typeA(ClassGen cg) {
